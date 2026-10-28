@@ -1,0 +1,1168 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>[hidden]{display:none!important}</style>
+<title>二次函數四個動作</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@700;900&family=STIX+Two+Text:ital,wght@0,400;0,600;1,400;1,600&display=swap">
+<style>
+/* 版面概念：一本方眼筆記本。左邊是方眼紙上的圖（格線就是坐標），右邊是有紅色邊線的筆記欄；四個動作用四色索引貼與螢光筆區分。 */
+:root{
+  --paper:#E8EFF0; --sheet:#F9FBFB; --grid:#D4E3E6; --grid-2:#AFCBD1;
+  --ink:#14233A; --ink-2:#4A6072; --ink-3:#8AA0AC;
+  --red:#C33A2E; --red-soft:rgba(195,58,46,.32);
+  --t1:#F3DF45; --t2:#93D6BE; --t3:#F4A7B6; --t4:#97C3F0; --t0:#D3DFE2;
+  --on-tab:#14233A; --hl:var(--t1);
+  --f-display:"Noto Serif TC","Songti TC","PMingLiU",serif;
+  --f-body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  --f-hand:"LXGW WenKai TC","Kaiti TC","BiauKai","DFKai-SB",serif;
+  --f-math:"STIX Two Text","Cambria","Times New Roman",serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#0F1A23; --sheet:#15232F; --grid:#1D3140; --grid-2:#2E4B5E;
+  --ink:#E3EBEE; --ink-2:#A6B8C3; --ink-3:#6C8594;
+  --red:#FF7466; --red-soft:rgba(255,116,102,.38);
+  --t1:#E6D23E; --t2:#7FC7AE; --t3:#E895A6; --t4:#86B3E3; --t0:#2A3D4B;
+  color-scheme:dark }}
+:root[data-theme="dark"]{
+  --paper:#0F1A23; --sheet:#15232F; --grid:#1D3140; --grid-2:#2E4B5E;
+  --ink:#E3EBEE; --ink-2:#A6B8C3; --ink-3:#6C8594;
+  --red:#FF7466; --red-soft:rgba(255,116,102,.38);
+  --t1:#E6D23E; --t2:#7FC7AE; --t3:#E895A6; --t4:#86B3E3; --t0:#2A3D4B;
+  color-scheme:dark }
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+:root{--swp:100%}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--swp:45%}}
+:root[data-theme="dark"]{--swp:45%}
+@media (max-width:600px){.ann{font-size:25px}.ann.sm{font-size:22px}.mth{font-size:23px}.pl-tick{font-size:21px}.pl-name{font-size:26px}.handle .hit{r:40px}.handle .knob{r:15px}.pl-title{font-size:22px}}
+body{
+  background-color:var(--paper); color:var(--ink);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:26px 26px; background-position:-1px -1px;
+  font-family:var(--f-body); font-size:16px; line-height:1.7;
+  padding-left:max(16px,env(safe-area-inset-left,0px)); padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-block:0 40px;
+}
+.wrap{max-width:1280px;margin:0 auto}
+i.v,.eq i{font-family:var(--f-math);font-style:italic}
+.m{font-family:var(--f-math);font-variant-numeric:tabular-nums}
+sup{font-size:.62em;line-height:0}
+
+/* 刊頭 */
+.mast{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:8px 32px;padding-top:30px}
+.mast h1{font-family:var(--f-display);font-weight:900;font-size:clamp(28px,4.4vw,46px);line-height:1.15;margin:0;letter-spacing:.02em;text-wrap:balance}
+.mast h1 small{display:block;font-family:var(--f-hand);font-weight:400;font-size:18px;color:var(--ink-2);letter-spacing:0;margin-bottom:6px}
+.mast p{margin:0 0 6px;font-family:var(--f-hand);color:var(--ink-2);max-width:30em;font-size:16px}
+
+/* 索引貼 */
+.tabs{display:flex;gap:4px;margin-top:22px;overflow-x:auto;scrollbar-width:none;border-bottom:2px solid var(--ink)}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:0 0 auto;appearance:none;border:0;cursor:pointer;font-family:var(--f-body);font-weight:700;font-size:16px;color:var(--on-tab);
+  padding:10px 18px 7px;border-radius:7px 7px 0 0;margin-top:8px;display:flex;align-items:baseline;gap:8px;transition:margin .18s,padding .18s;background:var(--tc)}
+.tab .n{font-family:var(--f-math);font-weight:600;font-size:15px;opacity:.7}
+.tab[data-c="0"]{--tc:var(--t0);color:var(--ink)}
+.tab[data-c="1"]{--tc:var(--t1)}.tab[data-c="2"]{--tc:var(--t2)}.tab[data-c="3"]{--tc:var(--t3)}.tab[data-c="4"]{--tc:var(--t4)}
+.tab[aria-selected="true"]{margin-top:0;padding-top:15px;box-shadow:inset 0 -3px 0 var(--ink)}
+.tab:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+
+/* 面板 */
+.panel{padding-top:26px}
+.panel[data-move="1"]{--hl:var(--t1)}.panel[data-move="2"]{--hl:var(--t2)}.panel[data-move="3"]{--hl:var(--t3)}.panel[data-move="4"]{--hl:var(--t4)}
+.work{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(300px,1fr);gap:28px;align-items:start}
+@media (max-width:920px){.work{grid-template-columns:minmax(0,1fr)}}
+
+.stage{position:relative;background:var(--sheet);border:1.5px solid var(--ink);padding:10px}
+.stage svg{display:block;width:100%;height:auto}
+.tape{position:absolute;top:-11px;left:22px;width:92px;height:22px;background:var(--hl);opacity:.78;transform:rotate(-3deg)}
+.tape.r{left:auto;right:26px;transform:rotate(4deg);width:70px}
+.stage-hint{margin:8px 4px 0;font-family:var(--f-hand);color:var(--ink-2);font-size:15.5px}
+.strip{margin-top:18px}
+.strip h3{font-family:var(--f-hand);font-weight:700;font-size:17px;margin:0 0 4px}
+
+/* 筆記欄 */
+.nb{background:var(--sheet);border:1.5px solid var(--ink);padding:22px 22px 24px 46px;position:relative;display:flex;flex-direction:column;gap:16px;min-width:0}
+.nb::before{content:"";position:absolute;top:0;bottom:0;left:30px;width:1.5px;background:var(--red-soft)}
+.nb-head{display:flex;align-items:center;gap:14px}
+.nb-no{font-family:var(--f-math);font-weight:600;font-size:34px;line-height:1;width:54px;height:54px;border-radius:50%;display:grid;place-items:center;background:var(--hl);color:var(--on-tab);flex:none}
+.nb h2{font-family:var(--f-display);font-weight:900;font-size:38px;line-height:1.05;margin:0}
+.nb-sub{margin:4px 0 0;font-family:var(--f-display);font-weight:700;font-size:18px;color:var(--ink-2)}
+.nb-years{margin:0;font-size:14px;color:var(--ink-2);border-top:1px dashed var(--ink-3);border-bottom:1px dashed var(--ink-3);padding:6px 0}
+.nb-years b{font-family:var(--f-math);font-weight:600;color:var(--ink)}
+.hand{font-family:var(--f-hand);font-size:17px;line-height:1.65;color:var(--ink);margin:0}
+.hand.dim{color:var(--ink-2)}
+.hand b{background:linear-gradient(transparent 58%,color-mix(in srgb,var(--hl) var(--swp),transparent) 58%);font-weight:700}
+.eq{font-family:var(--f-math);font-size:clamp(26px,3vw,32px);line-height:1.25;letter-spacing:.01em;font-variant-numeric:tabular-nums}
+.eq.big{font-size:clamp(28px,3.4vw,36px)}
+.eq .mk{background:linear-gradient(transparent 60%,color-mix(in srgb,var(--hl) var(--swp),transparent) 60%)}
+.ledger{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;margin:0;font-size:15px}
+.ledger dt{color:var(--ink-2)}
+.ledger dd{margin:0;font-family:var(--f-math);font-size:17px;font-variant-numeric:tabular-nums;min-width:0}
+.ledger dd .zh{font-family:var(--f-body);font-size:15px}
+.take{margin:4px 0 0;padding-top:14px;border-top:1.5px solid var(--ink);font-family:var(--f-hand);font-size:18.5px;line-height:1.75}
+.take::before{content:"帶走這一句";display:block;font-family:var(--f-body);font-weight:700;font-size:13px;color:var(--ink-2);letter-spacing:.08em;margin-bottom:2px}
+.take span{background:linear-gradient(transparent 58%,color-mix(in srgb,var(--hl) var(--swp),transparent) 58%);box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.label{font-weight:700;font-size:13px;color:var(--ink-2);letter-spacing:.08em;margin:0 0 6px}
+
+/* 控制項 */
+.ctl{display:grid;gap:4px}
+.ctl label{font-family:var(--f-math);font-size:18px}
+.ctl output{font-variant-numeric:tabular-nums}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:30px;background:transparent;margin:0}
+input[type=range]::-webkit-slider-runnable-track{height:2px;background:var(--ink)}
+input[type=range]::-moz-range-track{height:2px;background:var(--ink)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--hl);border:2.5px solid var(--ink);margin-top:-10px;cursor:pointer}
+input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--hl);border:2.5px solid var(--ink);cursor:pointer}
+input[type=range]:focus-visible{outline:2px dashed var(--ink);outline-offset:4px}
+.btn{appearance:none;font:700 15px/1 var(--f-body);color:var(--ink);background:var(--sheet);border:1.5px solid var(--ink);border-radius:4px;padding:10px 14px;cursor:pointer}
+.btn:hover{background:var(--hl);color:var(--on-tab)}
+.btn.solid{background:var(--ink);color:var(--sheet)}
+.btn.solid:hover{background:var(--hl);color:var(--on-tab)}
+.btn.ghost{border-color:transparent;text-decoration:underline;text-underline-offset:4px}
+.btn:focus-visible,.seg button:focus-visible,.popt:focus-visible,.clue:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.seg{display:inline-flex;border:1.5px solid var(--ink);border-radius:4px;overflow:hidden;flex-wrap:wrap}
+.seg button{appearance:none;border:0;background:var(--sheet);color:var(--ink);font:500 15px/1 var(--f-body);padding:10px 14px;cursor:pointer}
+.seg button+button{border-left:1.5px solid var(--ink)}
+.seg button[aria-pressed="true"]{background:var(--hl);color:var(--on-tab);font-weight:700}
+.fb{margin:0;font-family:var(--f-hand);font-size:17px;min-height:1.6em}
+.fb.ok b{color:var(--ink);background:linear-gradient(transparent 58%,color-mix(in srgb,var(--t2) var(--swp),transparent) 58%)}
+.fb.no b{color:var(--red)}
+.streak{margin:0;font-size:14px;color:var(--ink-2)}
+.drill{border:1.5px dashed var(--ink-3);padding:14px;display:grid;gap:10px}
+.drill-off{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.drill-on{display:grid;gap:10px}
+
+/* 預測 */
+.predict{border-left:4px solid var(--hl);padding:2px 0 2px 12px;display:grid;gap:8px}
+.pq{margin:0;font-weight:700;font-size:15.5px}
+.popts{display:flex;flex-wrap:wrap;gap:6px}
+.popt{appearance:none;font:500 14.5px/1.2 var(--f-body);color:var(--ink);background:var(--sheet);border:1.5px solid var(--ink-3);border-radius:999px;padding:7px 12px;cursor:pointer}
+.popt.on{border-color:var(--ink);background:var(--hl);color:var(--on-tab);font-weight:700}
+.popt.right{border-color:var(--ink);background:var(--t2);color:var(--on-tab);font-weight:700}
+.popt.wrong{text-decoration:line-through;text-decoration-color:var(--red);text-decoration-thickness:2px}
+.pres{margin:0;font-family:var(--f-hand);font-size:16.5px}
+
+/* 測試點清單 */
+.tests{list-style:none;margin:0;padding:0;display:grid;gap:6px;max-height:280px;overflow:auto}
+.tests li{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;align-items:baseline;padding:7px 8px;border:1px solid transparent;border-radius:4px;cursor:pointer;font-size:14.5px}
+.tests li:hover{border-color:var(--ink-3)}
+.tests li.sel{border-color:var(--ink);background:color-mix(in srgb,var(--hl) 22%,transparent)}
+.tests .pt{font-family:var(--f-math);font-size:16px;white-space:nowrap}
+.tests .why{grid-column:2;color:var(--ink-2);font-family:var(--f-hand);font-size:15.5px}
+.chip{display:inline-block;font-size:12.5px;font-weight:700;padding:1px 8px;border-radius:3px;margin-right:6px}
+.chip.yes{background:var(--t2);color:var(--on-tab)}
+.chip.no{background:transparent;color:var(--red);border:1.5px solid var(--red)}
+
+/* SVG */
+.pl-bg{fill:var(--sheet)}
+.pl-minor{stroke:var(--grid);stroke-width:1}
+.pl-major{stroke:var(--grid-2);stroke-width:1}
+.pl-axis{stroke:var(--ink);stroke-width:1.5}
+.pl-arrow{fill:var(--ink)}
+.pl-tick{fill:var(--ink-2);font-family:var(--f-math);font-size:14px}
+.pl-name{fill:var(--ink);font-family:var(--f-math);font-style:italic;font-size:19px}
+.pl-title{fill:var(--ink-2);font-family:var(--f-hand);font-size:15px}
+.c-main{fill:none;stroke:var(--ink);stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round}
+.c-main.thin{stroke-width:2.4}
+.c-ghost{fill:none;stroke:var(--ink-3);stroke-width:1.8;stroke-dasharray:7 6}
+.c-axis{stroke:var(--ink-2);stroke-width:1.5;stroke-dasharray:3 5;fill:none}
+.c-move{fill:none;stroke:var(--ink-2);stroke-width:2;stroke-dasharray:2 5;stroke-linecap:round}
+.c-hl{fill:none;stroke:var(--hl);stroke-width:10;stroke-linecap:round;opacity:.85}
+.c-hl.sm{stroke-width:7}
+.c-fam{fill:none;stroke:var(--ink-3);stroke-width:1.3}
+.c-fold{fill:none;stroke:var(--hl);stroke-width:7;stroke-linecap:round;opacity:.9}
+.c-knife{stroke:var(--ink);stroke-width:1.6;stroke-dasharray:10 5}
+.c-red{stroke:var(--red);stroke-width:2;stroke-dasharray:6 5;fill:none}
+.c-redfill{fill:url(#hatch)}
+.c-trace{fill:none;stroke:var(--ink);stroke-width:2.2}
+.c-tick{stroke:var(--ink);stroke-width:2}
+.dot{fill:var(--ink)}
+.dot-o{fill:var(--sheet);stroke:var(--ink);stroke-width:2.2}
+.dot-hl{fill:var(--hl);stroke:var(--ink);stroke-width:2.2}
+.dot-ok{fill:var(--t2);stroke:var(--ink);stroke-width:2}
+.x-no{stroke:var(--red);stroke-width:3;stroke-linecap:round}
+.ann{font-family:var(--f-hand);font-size:18px;fill:var(--ink);paint-order:stroke;stroke:var(--sheet);stroke-width:5px;stroke-linejoin:round}
+.ann.sm{font-size:15.5px}
+.ann.red{fill:var(--red)}
+.ann.dim{fill:var(--ink-2)}
+.mth{font-family:var(--f-math);font-size:16px;fill:var(--ink);paint-order:stroke;stroke:var(--sheet);stroke-width:5px;stroke-linejoin:round}
+.hatch-line{stroke:var(--red);stroke-width:1.3;opacity:.55}
+.handle{cursor:grab;touch-action:none;outline:none}
+.handle .hit{fill:transparent}
+.handle .knob{fill:var(--hl);stroke:var(--ink);stroke-width:2.6}
+.handle.ring .knob{fill:var(--sheet);stroke-dasharray:4 3}
+.handle.pill .knob{rx:6}
+.handle:focus-visible .knob{stroke-width:4.5}
+.handle.dragging{cursor:grabbing}
+.handle.dragging .knob{stroke-width:3.6}
+.arrowhead{fill:var(--ink-2)}
+.arrowhead.ink{fill:var(--ink)}
+
+/* 診斷 */
+.diag{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:36px;align-items:start}
+@media (max-width:920px){.diag{grid-template-columns:minmax(0,1fr)}}
+.hero{font-family:var(--f-display);font-weight:900;font-size:clamp(34px,5.4vw,64px);line-height:1.12;margin:6px 0 18px;text-wrap:balance}
+.lede{font-size:17px;max-width:32em;margin:0 0 14px}
+.lolli{margin:0;background:var(--sheet);border:1.5px solid var(--ink);padding:20px 22px 16px;position:relative}
+.lolli figcaption{font-family:var(--f-display);font-weight:700;font-size:18px;margin-bottom:12px}
+.lrow{display:grid;grid-template-columns:3.4em minmax(0,1fr);gap:4px 12px;padding:8px 0;border-bottom:1px dashed var(--grid-2)}
+.lrow .yr{font-family:var(--f-math);font-weight:600;font-size:22px;line-height:1.3;grid-row:span 2}
+.lrow .gist{font-size:14.5px;color:var(--ink-2);display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center}
+.mchip{font-size:12px;font-weight:700;padding:0 7px;border-radius:3px;color:var(--on-tab);line-height:1.6}
+.track{position:relative;height:26px}
+.track::before{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:var(--grid-2)}
+.track .stem{position:absolute;left:0;top:50%;height:3px;margin-top:-1.5px;background:var(--ink)}
+.track .bead{position:absolute;top:50%;width:18px;height:18px;margin:-9px 0 0 -9px;border-radius:50%;border:2.5px solid var(--ink)}
+.track .rate{position:absolute;top:50%;transform:translateY(-50%);font-family:var(--f-math);font-weight:600;font-size:17px;padding-left:16px;white-space:nowrap}
+.laxis{display:grid;grid-template-columns:3.4em minmax(0,1fr);gap:12px;margin-top:6px}
+.laxis .ticks{position:relative;height:20px;font-family:var(--f-math);font-size:13px;color:var(--ink-2)}
+.laxis .ticks span{position:absolute;transform:translateX(-50%)}
+.half{position:absolute;top:44px;bottom:38px;border-left:1.5px dashed var(--red-soft);pointer-events:none}
+.lolli .src{margin:10px 0 0;font-size:12.5px;color:var(--ink-2)}
+.moves{margin-top:34px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:2px solid var(--ink);border-bottom:2px solid var(--ink);background:var(--sheet)}
+@media (max-width:820px){.moves{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.mv{appearance:none;background:transparent;border:0;border-right:1px solid var(--grid-2);text-align:left;padding:16px 18px 18px;cursor:pointer;color:var(--ink);font-family:var(--f-body);display:grid;gap:6px;align-content:start}
+.mv:last-child{border-right:0}
+@media (max-width:820px){.mv:nth-child(2){border-right:0}.mv:nth-child(-n+2){border-bottom:1px solid var(--grid-2)}}
+.mv:hover{background:color-mix(in srgb,var(--mc) 20%,transparent)}
+.mv:focus-visible{outline:3px solid var(--ink);outline-offset:-3px}
+.mv svg{width:100%;max-width:150px;height:auto}
+.mv .nm{font-family:var(--f-display);font-weight:900;font-size:26px;line-height:1.2}
+.mv .nm span{background:linear-gradient(transparent 58%,color-mix(in srgb,var(--mc) var(--swp),transparent) 58%)}
+.mv .ak{font-family:var(--f-hand);font-size:17px}
+.mv .yy{font-size:13px;color:var(--ink-2)}
+.moves-h{font-family:var(--f-display);font-weight:700;font-size:20px;margin:34px 0 -20px}
+
+/* 羅盤 */
+.cmp{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:28px;align-items:start}
+@media (max-width:920px){.cmp{grid-template-columns:minmax(0,1fr)}}
+.clues{display:grid;gap:18px}
+.clue-g h3{font-family:var(--f-display);font-weight:700;font-size:19px;margin:0 0 8px}
+.clue-list{display:flex;flex-wrap:wrap;gap:8px}
+.clue{appearance:none;text-align:left;font:500 15px/1.35 var(--f-body);color:var(--ink);background:var(--sheet);border:1.5px solid var(--ink);border-radius:4px;padding:9px 12px;cursor:pointer}
+.clue:hover{background:color-mix(in srgb,var(--mc) 35%,var(--sheet))}
+.clue[aria-pressed="true"]{background:var(--mc);color:var(--on-tab);font-weight:700}
+.dialbox{background:var(--sheet);border:1.5px solid var(--ink);padding:18px;display:grid;grid-template-columns:minmax(0,220px) minmax(0,1fr);gap:20px;align-items:center}
+@media (max-width:560px){.dialbox{grid-template-columns:minmax(0,1fr)}.dialbox svg{max-width:240px;margin:0 auto}}
+.dialbox svg{width:100%;height:auto;display:block}
+.needle{transition:transform .7s cubic-bezier(.3,1.5,.5,1);transform-origin:150px 150px}
+.dial-rim{fill:var(--sheet);stroke:var(--ink);stroke-width:2}
+.dial-tick{stroke:var(--ink-3);stroke-width:1}
+.dial-tick.big{stroke:var(--ink);stroke-width:2}
+.dial-lab{font-family:var(--f-display);font-weight:900;font-size:22px;fill:var(--ink);text-anchor:middle;dominant-baseline:central}
+.dial-pad{stroke:var(--ink);stroke-width:1.5}
+.needle-a{fill:var(--red)}
+.needle-b{fill:var(--ink-3)}
+.dial-cap{fill:var(--ink)}
+.advice h3{font-family:var(--f-display);font-weight:900;font-size:30px;margin:0}
+.advice h3 span{background:linear-gradient(transparent 58%,color-mix(in srgb,var(--mc,var(--t0)) var(--swp),transparent) 58%)}
+.advice dl{margin:10px 0 0;display:grid;gap:10px}
+.advice dt{font-weight:700;font-size:13px;color:var(--ink-2);letter-spacing:.08em}
+.advice dd{margin:0;font-family:var(--f-hand);font-size:18px;line-height:1.6}
+.sketch{margin-top:22px;background:var(--sheet);border:1.5px solid var(--ink);padding:16px 18px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;align-items:center}
+@media (max-width:640px){.sketch{grid-template-columns:minmax(0,1fr)}}
+.sketch h3{font-family:var(--f-display);font-weight:900;font-size:22px;margin:0 0 8px}
+.sketch ol{margin:0 0 12px;padding-left:1.4em;font-family:var(--f-hand);font-size:17.5px}
+.sketch svg{width:100%;height:auto;display:block}
+.sk{fill:none;stroke:var(--ink);stroke-width:3;stroke-linecap:round}
+.sk.ax{stroke-dasharray:none;stroke-width:2}
+.sk-dot{fill:var(--t1);stroke:var(--ink);stroke-width:2.5}
+.sk-lab{font-family:var(--f-hand);font-size:16px;fill:var(--ink-2)}
+
+footer{margin-top:40px;font-size:13px;color:var(--ink-2);border-top:1px solid var(--ink-3);padding-top:12px;display:flex;flex-wrap:wrap;gap:6px 24px;justify-content:space-between}
+
+
+.col{display:contents}
+/* ===== 一頁一畫面：固定設計尺寸，等比縮放 ===== */
+html.fit,html.fit body{height:100%;overflow:hidden}
+html.fit body{padding:0}
+html.fit .wrap{position:fixed;transform-origin:0 0;max-width:none;margin:0;padding:20px 28px 26px;display:flex;flex-direction:column}
+html.fit .top{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;border-bottom:2px solid var(--ink);flex:none}
+html.fit .mast{padding-top:0;display:block}
+html.fit .mast h1{font-size:34px}
+html.fit .mast h1 small{font-size:16px;margin-bottom:2px}
+html.fit .mast p{display:none}
+html.fit .tabs{margin-top:0;border-bottom:0;overflow:visible}
+html.fit main{flex:1;min-height:0}
+html.fit .panel{height:100%;padding-top:18px}
+html.fit footer{display:none}
+html.fit .work{height:100%;gap:24px;align-items:stretch}
+html.fit-l .work{grid-template-columns:780px minmax(0,1fr)}
+html.fit-p .work{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1.1fr) minmax(0,1fr)}
+html.fit .stage{display:flex;flex-direction:column;min-height:0}
+html.fit .stage svg{flex:1 1 0;min-height:0;width:100%;height:100%}
+html.fit .stage-hint{flex:none;font-size:14.5px;margin-top:6px}
+html.fit .nb{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 28px;align-items:stretch;min-height:0;overflow:hidden;padding:18px 20px 18px 44px}
+html.fit .col{display:flex;flex-direction:column;gap:13px;min-height:0;min-width:0}
+html.fit .nb h2{font-size:34px}
+html.fit .nb-no{width:48px;height:48px;font-size:30px}
+html.fit .take{font-size:17px;line-height:1.7}
+html.fit .tests-box{flex:1;min-height:0;display:flex;flex-direction:column}
+html.fit .tests{max-height:none;flex:1;min-height:0}
+html.fit .strip{margin-top:0}
+html.fit .strip h3{font-size:15.5px}
+html.fit .strip svg{display:block;width:100%;height:auto}
+html.fit .strip svg[hidden]{display:none}
+html.fit .hero{font-size:54px;margin:0 0 12px}
+html.fit .lolli{padding:16px 20px 12px}
+html.fit .lrow{padding:6px 0}
+html.fit .mv svg{max-width:120px}
+html.fit .mv .nm{font-size:23px}
+html.fit .lede{font-size:16.5px}
+html.fit .moves-h{margin:22px 0 -14px}
+html.fit .moves{margin-top:22px}
+html.fit .mv{padding:12px 16px 14px}
+html.fit-l .diag{grid-template-columns:minmax(0,1fr) minmax(0,1.1fr)}
+html.fit-p .diag{grid-template-columns:minmax(0,1fr);gap:20px}
+html.fit .moves{grid-template-columns:repeat(4,minmax(0,1fr))}
+html.fit .mv{border-right:1px solid var(--grid-2);border-bottom:0}
+html.fit .mv:last-child{border-right:0}
+html.fit-l .cmp{grid-template-columns:minmax(0,1fr) minmax(0,1.05fr)}
+html.fit-p .cmp{grid-template-columns:minmax(0,1fr)}
+html.fit .dialbox{grid-template-columns:220px minmax(0,1fr)}
+html.fit .dialbox svg{max-width:none;margin:0}
+html.fit .sketch{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+
+html.fit .eq.big{font-size:30px;white-space:nowrap}
+.nb.quizzing #L-eq,.nb.quizzing #L-trans,.nb.quizzing .ctl,.nb.quizzing #L-led{display:none}
+html.fit .cmp{height:100%;align-items:center}
+html.fit .clue{font-size:17px;padding:11px 15px}
+html.fit .clue-g h3{font-size:22px}
+html.fit .clues{gap:26px}
+html.fit .clues>.hand{font-size:19px}
+html.fit-l .dialbox{grid-template-columns:300px minmax(0,1fr);padding:24px;gap:28px}
+html.fit .advice h3{font-size:34px}
+html.fit .advice dd{font-size:20px}
+html.fit .sketch{padding:20px 24px}
+html.fit .sketch ol{font-size:19px}
+.topr{display:block;min-width:0}
+.fs{display:none;appearance:none;border:1.5px solid var(--ink-3);background:transparent;color:var(--ink-2);font:500 13px/1 var(--f-body);padding:6px 10px;border-radius:4px;cursor:pointer;margin-bottom:6px}
+.fs:hover{border-color:var(--ink);color:var(--ink)}
+html.fit .topr{display:flex;flex-direction:row;align-items:flex-end;gap:14px}
+html.fit .fs{display:block;margin-bottom:10px}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="wrap">
+<div class="top">
+<header class="mast">
+  <h1><small>國中數學　九年級　二次函數</small>解題前的四個動作</h1>
+  <p>這裡沒有考題。動手操作四個動作，下次在紙上看到二次函數，你會知道第一筆從哪裡下。</p>
+</header>
+
+<div class="topr"><button class="fs" id="fs" type="button" title="全螢幕投影">全螢幕</button>
+<nav class="tabs" role="tablist" aria-label="章節">
+  <button class="tab" role="tab" data-c="0" data-go="diagnose" id="tab-diagnose"><span>為什麼是這四個</span></button>
+  <button class="tab" role="tab" data-c="1" data-go="locate" id="tab-locate"><span class="n">1</span>定位</button>
+  <button class="tab" role="tab" data-c="2" data-go="fold" id="tab-fold"><span class="n">2</span>對摺</button>
+  <button class="tab" role="tab" data-c="3" data-go="bound" id="tab-bound"><span class="n">3</span>邊界</button>
+  <button class="tab" role="tab" data-c="4" data-go="track" id="tab-track"><span class="n">4</span>追蹤</button>
+  <button class="tab" role="tab" data-c="0" data-go="compass" id="tab-compass"><span>解題羅盤</span></button>
+</nav></div>
+</div>
+
+<main>
+<!-- ============ 診斷 ============ -->
+<section class="panel" id="p-diagnose" data-move="0" role="tabpanel" aria-labelledby="tab-diagnose">
+  <div class="diag">
+    <div>
+      <h2 class="hero">讀得出頂點，<br>追不上變化。</h2>
+      <p class="lede">近五年會考的二次函數題，只要讀出頂點、判斷最大最小值的題目，全國通過率接近七成；要追蹤圖形平移時某個交點怎麼動的題目，掉到四成左右。</p>
+      <p class="lede">五題各不相同，拆開來卻只用到四個動作：<b>定位、對摺、邊界、追蹤</b>。每個動作都配一張可以拖、可以摺、可以點的圖。先預測，再操作，最後帶走一句話。</p>
+      <p class="hand dim">建議順序：1 → 4，最後到「解題羅盤」把四個動作接回紙本題目。</p>
+    </div>
+    <figure class="lolli" id="lolli" aria-label="111 到 115 年會考二次函數題全國通過率">
+      <figcaption>近五年會考二次函數題：全國通過率</figcaption>
+      <div id="lrows"></div>
+      <div class="laxis"><span></span><div class="ticks" id="lticks"></div></div>
+      <p class="src">每列標出解題需要的動作。紅色虛線為 50%。資料：111–115 年國中教育會考數學科。</p>
+    </figure>
+  </div>
+  <h3 class="moves-h">四個動作</h3>
+  <div class="moves" id="moves"></div>
+</section>
+
+<!-- ============ 1 定位 ============ -->
+<section class="panel" id="p-locate" data-move="1" role="tabpanel" aria-labelledby="tab-locate" hidden>
+  <div class="work">
+    <div class="stage"><span class="tape"></span>
+      <svg id="L-svg" aria-label="可拖曳頂點的拋物線"></svg>
+      <p class="stage-hint" id="L-hint">拖曳黃色頂點（也可以用方向鍵）。灰色虛線是原本的 <i class="v">y</i> = <i class="v">ax</i><sup>2</sup>，整條拋物線只是被搬過去。</p>
+    </div>
+    <aside class="nb"><div class="col">
+      <header class="nb-head"><span class="nb-no">1</span><div><h2>定位</h2><p class="nb-sub">先找頂點，再看開口</p></div></header>
+      <p class="nb-years">會考 <b>113</b>　由標準式判斷最大或最小值　<b>69.7%</b>　也用在 <b>115</b></p>
+      <div class="eq" id="L-eq" aria-live="polite"></div>
+      <p class="hand" id="L-trans"></p>
+      <div class="ctl"><label for="L-a"><i class="v">a</i> = <output id="L-av">1</output></label><input type="range" id="L-a" min="-3" max="3" step="0.25" value="1"></div>
+      <dl class="ledger" id="L-led"></dl>
+      </div><div class="col"><div class="drill">
+        <div class="drill-off" id="L-off"><button class="btn solid" id="L-start">換你讀式：出一題</button><span class="hand dim">只看式子，把頂點放對位置。</span></div>
+        <div class="drill-on" id="L-on" hidden>
+          <div class="eq big" id="L-qeq"></div>
+          <p class="hand dim">把空心圈拖到頂點，再選開口方向。</p>
+          <div class="seg" id="L-dir" role="group" aria-label="開口方向"><button data-d="1" aria-pressed="false">開口向上</button><button data-d="-1" aria-pressed="false">開口向下</button></div>
+          <div class="row"><button class="btn solid" id="L-check">對答案</button><button class="btn" id="L-next" hidden>下一題</button><button class="btn ghost" id="L-exit">回到自由操作</button></div>
+          <p class="fb" id="L-fb" aria-live="polite"></p>
+          <p class="streak" id="L-streak"></p>
+        </div>
+      </div>
+      <p class="take"><span>看到 <i class="v">y</i> = <i class="v">a</i>(<i class="v">x</i> − <i class="v">h</i>)<sup>2</sup> + <i class="v">k</i>：頂點是 (<i class="v">h</i>, <i class="v">k</i>)，讓括號等於 0 的 <i class="v">x</i> 就是 <i class="v">h</i>。<i class="v">a</i> 是正的，<i class="v">k</i> 是最小值；<i class="v">a</i> 是負的，<i class="v">k</i> 是最大值。</span></p>
+    </div></aside>
+  </div>
+</section>
+
+<!-- ============ 2 對摺 ============ -->
+<section class="panel" id="p-fold" data-move="2" role="tabpanel" aria-labelledby="tab-fold" hidden>
+  <div class="work">
+    <div class="stage"><span class="tape"></span>
+      <svg id="F-svg" aria-label="拋物線與水平線的兩個交點"></svg>
+      <p class="stage-hint" id="F-hint">上下拖曳右邊的刀片，看水平線切到的兩點；拖曳頂點換一條拋物線。按「沿對稱軸對摺」看左右兩半疊在一起。</p>
+    </div>
+    <aside class="nb"><div class="col">
+      <header class="nb-head"><span class="nb-no">2</span><div><h2>對摺</h2><p class="nb-sub">一樣高的兩點，對稱軸在正中間</p></div></header>
+      <p class="nb-years">會考 <b>112</b>　用對稱性求兩頂點的距離　<b>55.8%</b>　也用在 <b>111</b></p>
+      <div class="seg" id="F-mode" role="group" aria-label="模式"><button data-m="free" aria-pressed="true">自由操作</button><button data-m="axis" aria-pressed="false">找對稱軸</button><button data-m="mirror" aria-pressed="false">找對稱點</button></div>
+      </div><div class="col"><div id="F-free">
+        <div class="row" style="margin-bottom:12px"><button class="btn solid" id="F-fold">沿對稱軸對摺</button></div>
+        <dl class="ledger" id="F-led"></dl>
+        <p class="hand" id="F-note" style="margin-top:10px"></p>
+      </div>
+      <div id="F-ch" hidden class="drill">
+        <p class="hand" id="F-chq"></p>
+        <div class="row"><button class="btn solid" id="F-check">對答案</button><button class="btn" id="F-new">換一組</button></div>
+        <p class="fb" id="F-fb" aria-live="polite"></p>
+      </div>
+      <p class="take"><span>只要兩點的 <i class="v">y</i> 坐標一樣，它們就對稱於對稱軸：<i class="v">x</i><sub>1</sub> + <i class="v">x</i><sub>2</sub> = 2<i class="v">h</i>。找中點、找軸、找另一點，都不必解方程式。</span></p>
+    </div></aside>
+  </div>
+</section>
+
+<!-- ============ 3 邊界 ============ -->
+<section class="panel" id="p-bound" data-move="3" role="tabpanel" aria-labelledby="tab-bound" hidden>
+  <div class="work">
+    <div class="stage"><span class="tape"></span>
+      <svg id="B-svg" aria-label="不知道 a 的一整族拋物線"></svg>
+      <p class="stage-hint">灰線是同一個頂點、同一個開口方向、但 <i class="v">a</i> 不同的拋物線。<b>點一下圖上任何位置</b>，問：這個點可能在拋物線上嗎？左邊的掃描線可以上下拖。</p>
+    </div>
+    <aside class="nb"><div class="col">
+      <header class="nb-head"><span class="nb-no">3</span><div><h2>邊界</h2><p class="nb-sub">頂點是一道牆，牆外的 y 值不會出現</p></div></header>
+      <p class="nb-years">會考 <b>115</b>　判斷甲、乙說的 <i class="v">y</i> 坐標可不可能　<b>62.2%</b></p>
+      <div class="seg" id="B-dir" role="group" aria-label="開口方向"><button data-d="1" aria-pressed="true">開口向上</button><button data-d="-1" aria-pressed="false">開口向下</button></div>
+      <dl class="ledger" id="B-led"></dl>
+      <p class="hand" id="B-scan"></p>
+      </div><div class="col"><div class="tests-box">
+        <p class="label">測試過的點</p>
+        <ul class="tests" id="B-tests"></ul>
+        <div class="row" style="margin-top:8px"><button class="btn" id="B-clear">清除測試點</button></div>
+      </div>
+      <p class="take"><span>開口向上，<i class="v">y</i> ≥ <i class="v">k</i>；開口向下，<i class="v">y</i> ≤ <i class="v">k</i>。對稱軸上只有頂點一個點。就算不知道 <i class="v">a</i>，只要知道頂點和開口方向，就能判斷一個 <i class="v">y</i> 值可不可能。</span></p>
+    </div></aside>
+  </div>
+</section>
+
+<!-- ============ 4 追蹤 ============ -->
+<section class="panel" id="p-track" data-move="4" role="tabpanel" aria-labelledby="tab-track" hidden>
+  <div class="work">
+    <div class="stage"><span class="tape"></span><span class="tape r"></span>
+      <svg id="T-svg" aria-label="平移中的拋物線"></svg>
+      <div class="strip">
+        <h3 id="T-strip-h">記錄紙：y 軸交點跟著頂點怎麼變</h3>
+        <svg id="T-strip-h-svg" aria-label="記錄紙"></svg>
+        <svg id="T-strip-v-svg" aria-label="記錄紙" hidden></svg>
+      </div>
+    </div>
+    <aside class="nb"><div class="col">
+      <header class="nb-head"><span class="nb-no">4</span><div><h2>追蹤</h2><p class="nb-sub">平移時先問：誰在動？怎麼動？</p></div></header>
+      <p class="nb-years">會考 <b>111</b>　往上平移後兩交點的和與距離　<b>39.8%</b>；<b>114</b>　向右平移時 <i class="v">y</i> 軸交點怎麼移動　<b>44.1%</b></p>
+      <div class="seg" id="T-mode" role="group" aria-label="平移方向"><button data-m="h" aria-pressed="true">左右平移</button><button data-m="v" aria-pressed="false">上下平移</button></div>
+      <div id="T-h">
+        <div class="predict" id="T-ph"></div>
+        <div class="row" style="margin-top:12px"><button class="btn solid" id="T-playh">從 x = −6 向右平移</button>
+          <span class="seg" id="T-sign" role="group" aria-label="開口"><button data-s="1" aria-pressed="true">開口向上</button><button data-s="-1" aria-pressed="false">開口向下</button></span></div>
+        <div class="ctl" style="margin-top:10px"><label for="T-hr">頂點的 <i class="v">x</i> 坐標 <i class="v">h</i> = <output id="T-hv"></output></label><input type="range" id="T-hr" min="-6" max="6" step="0.25" value="-6"></div>
+      </div>
+      <div id="T-v" hidden>
+        <div class="predict" id="T-pv1"></div>
+        <div class="predict" id="T-pv2"></div>
+        <div class="row" style="margin-top:12px"><button class="btn solid" id="T-playv">從 k = −6 向上平移</button></div>
+        <div class="ctl" style="margin-top:10px"><label for="T-kr">頂點的 <i class="v">y</i> 坐標 <i class="v">k</i> = <output id="T-kv"></output></label><input type="range" id="T-kr" min="-6" max="3" step="0.25" value="-6"></div>
+      </div>
+      </div><div class="col"><div id="T-stripslot"></div><div class="eq" id="T-eq"></div>
+      <dl class="ledger" id="T-led"></dl>
+      <p class="take"><span>平移不改變形狀，只改變位置。要追蹤一個點，先把它的坐標寫成 <i class="v">h</i> 或 <i class="v">k</i> 的式子：<i class="v">y</i> 軸交點是 <i class="v">ah</i><sup>2</sup> + <i class="v">k</i>，它自己就是一條拋物線，所以會轉彎；上下平移時對稱軸不動，兩交點的和 2<i class="v">h</i> 也不動。</span></p>
+    </div></aside>
+  </div>
+</section>
+
+<!-- ============ 羅盤 ============ -->
+<section class="panel" id="p-compass" data-move="0" role="tabpanel" aria-labelledby="tab-compass" hidden>
+  <div class="cmp">
+    <div class="clues" id="clues"></div>
+    <div>
+      <div class="dialbox">
+        <svg id="dial" viewBox="0 0 300 300" aria-hidden="true"></svg>
+        <div class="advice" id="advice" aria-live="polite"></div>
+      </div>
+      <div class="sketch">
+        <div>
+          <h3>不管哪一題，草稿紙先畫三筆</h3>
+          <ol><li>畫對稱軸 <i class="v">x</i> = <i class="v">h</i></li><li>點出頂點 (<i class="v">h</i>, <i class="v">k</i>)</li><li>照開口方向畫出大概的樣子</li></ol>
+          <button class="btn solid" id="sk-play">示範三筆</button>
+        </div>
+        <svg id="sk" viewBox="0 0 320 210" aria-label="草稿紙三筆示範"></svg>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer><span>資料：111–115 年國中教育會考數學科，二次函數題全國通過率。</span><span>可投影、可在平板上用手指操作。</span></footer>
+</div>
+
+<script>
+(()=>{
+'use strict';
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const NS='http://www.w3.org/2000/svg';
+function E(tag,attrs,parent,text){const e=document.createElementNS(NS,tag);if(attrs)for(const k in attrs)e.setAttribute(k,attrs[k]);if(text!=null)e.textContent=text;if(parent)parent.appendChild(e);return e;}
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const r2=v=>Math.round(v*2)/2, r4=v=>Math.round(v*4)/4;
+const near=(a,b,t=1e-6)=>Math.abs(a-b)<t;
+function fmt(v,d=2){if(Math.abs(v)<1e-9)v=0;let s=String(+v.toFixed(d));return s.replace('-','−');}
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const sub=n=>n===1?'₁':'₂';
+
+/* ---------- 方程式排版 ---------- */
+function vform(a,h,k,mark){
+  const aS=near(a,1)?'':near(a,-1)?'−':fmt(a);
+  const hs=near(h,0)?'<i>x</i>':`(<i>x</i> ${h>0?'−':'+'} ${fmt(Math.abs(h))})`;
+  const hp=mark?`<span class="mk">${hs}</span>`:hs;
+  let s=`<i>y</i> = ${aS}${hp}<sup>2</sup>`;
+  if(!near(k,0))s+=` ${k>0?'+':'−'} ${mark?'<span class="mk">':''}${fmt(Math.abs(k))}${mark?'</span>':''}`;
+  return s;
+}
+
+/* ---------- 坐標平面 ---------- */
+let PID=0;
+class Plot{
+  constructor(svg,o={}){
+    Object.assign(this,{xmin:-8,xmax:8,ymin:-7,ymax:7,W:640,H:560,step:2,minor:1,xname:'x',yname:'y',xt:null,yt:null},o);
+    this.svg=svg;svg.setAttribute('viewBox',`0 0 ${this.W} ${this.H}`);
+    const id='p'+(++PID);this.id=id;
+    this.defs=E('defs',null,svg);
+    const cp=E('clipPath',{id:id+'c'},this.defs);E('rect',{x:0,y:0,width:this.W,height:this.H},cp);
+    const pat=E('pattern',{id:id+'h',width:10,height:10,patternUnits:'userSpaceOnUse',patternTransform:'rotate(45)'},this.defs);
+    E('line',{x1:0,y1:0,x2:0,y2:10,class:'hatch-line'},pat);
+    this.gGrid=E('g',null,svg);
+    this.gBack=E('g',{'clip-path':`url(#${id}c)`},svg);
+    this.gMain=E('g',{'clip-path':`url(#${id}c)`},svg);
+    this.gLab=E('g',null,svg);
+    this.gTop=E('g',null,svg);
+    this.grid();
+  }
+  X(x){return (x-this.xmin)/(this.xmax-this.xmin)*this.W}
+  Y(y){return this.H-(y-this.ymin)/(this.ymax-this.ymin)*this.H}
+  ux(p){return this.xmin+p/this.W*(this.xmax-this.xmin)}
+  uy(p){return this.ymin+(this.H-p)/this.H*(this.ymax-this.ymin)}
+  at(ev){const m=this.svg.getScreenCTM();if(!m)return{x:0,y:0};const p=new DOMPoint(ev.clientX,ev.clientY).matrixTransform(m.inverse());return{x:this.ux(p.x),y:this.uy(p.y)};}
+  grid(){
+    const g=this.gGrid,W=this.W,H=this.H;
+    E('rect',{x:0,y:0,width:W,height:H,class:'pl-bg'},g);
+    for(let x=Math.ceil(this.xmin/this.minor)*this.minor;x<=this.xmax+1e-9;x+=this.minor)E('line',{x1:this.X(x),x2:this.X(x),y1:0,y2:H,class:near(x%5,0)?'pl-major':'pl-minor'},g);
+    for(let y=Math.ceil(this.ymin/this.minor)*this.minor;y<=this.ymax+1e-9;y+=this.minor)E('line',{y1:this.Y(y),y2:this.Y(y),x1:0,x2:W,class:near(y%5,0)?'pl-major':'pl-minor'},g);
+    const ax=this.Y(clamp(0,this.ymin,this.ymax)),ay=this.X(clamp(0,this.xmin,this.xmax));
+    E('line',{x1:0,x2:W-2,y1:ax,y2:ax,class:'pl-axis'},g);E('line',{x1:ay,x2:ay,y1:H,y2:2,class:'pl-axis'},g);
+    E('path',{d:`M${W} ${ax}l-11 -5v10z`,class:'pl-arrow'},g);E('path',{d:`M${ay} 0l-5 11h10z`,class:'pl-arrow'},g);
+    const st=this.step;
+    for(let x=Math.ceil(this.xmin/st)*st;x<this.xmax-0.3;x+=st){if(near(x,0)||x<this.xmin+0.3)continue;const t=E('text',{x:this.X(x),y:ax+18,class:'pl-tick','text-anchor':'middle'},g,fmt(x));}
+    for(let y=Math.ceil(this.ymin/st)*st;y<this.ymax-0.3;y+=st){if(near(y,0)||y<this.ymin+0.3)continue;E('text',{x:ay-7,y:this.Y(y)+5,class:'pl-tick','text-anchor':'end'},g,fmt(y));}
+    if(this.xmin<0&&this.ymin<0)E('text',{x:ay-7,y:ax+18,class:'pl-tick','text-anchor':'end'},g,'O');
+    E('text',{x:W-14,y:ax-10,class:'pl-name','text-anchor':'end'},g,this.xname);
+    E('text',{x:ay+10,y:20,class:'pl-name'},g,this.yname);
+    if(this.xt)E('text',{x:W-36,y:ax-10,class:'pl-title','text-anchor':'end'},g,this.xt);
+    if(this.yt)E('text',{x:ay+30,y:20,class:'pl-title'},g,this.yt);
+  }
+  path(f,x0=this.xmin,x1=this.xmax,n=220){let d='';for(let i=0;i<=n;i++){const x=x0+(x1-x0)*i/n;const y=clamp(f(x),this.ymin-40,this.ymax+40);d+=(i?'L':'M')+this.X(x).toFixed(1)+' '+this.Y(y).toFixed(1);}return d;}
+  clear(){this.gBack.textContent='';this.gMain.textContent='';this.gLab.textContent='';}
+  line(x1,y1,x2,y2,cls,g=this.gMain){return E('line',{x1:this.X(x1),y1:this.Y(y1),x2:this.X(x2),y2:this.Y(y2),class:cls},g);}
+  dot(x,y,cls='dot',r=5,g=this.gMain){return E('circle',{cx:this.X(x),cy:this.Y(y),r,class:cls},g);}
+  text(x,y,s,cls='ann',dx=0,dy=0,anchor='start',g=this.gLab){return E('text',{x:this.X(x)+dx,y:this.Y(y)+dy,class:cls,'text-anchor':anchor},g,s);}
+  curve(f,cls,g=this.gMain,x0,x1){return E('path',{d:this.path(f,x0,x1),class:cls},g);}
+  vline(x,cls,g=this.gMain){return E('line',{x1:this.X(x),x2:this.X(x),y1:0,y2:this.H,class:cls},g);}
+  hline(y,cls,g=this.gMain){return E('line',{y1:this.Y(y),y2:this.Y(y),x1:0,x2:this.W,class:cls},g);}
+  head(x,y,dir,cls='arrowhead',g=this.gMain){ // dir: 'r','l','u','d'
+    const px=this.X(x),py=this.Y(y),s=9;const d={r:`M${px} ${py}l-${s} -${s/1.8}v${s/0.9}z`,l:`M${px} ${py}l${s} -${s/1.8}v${s/0.9}z`,u:`M${px} ${py}l-${s/1.8} ${s}h${s/0.9}z`,d:`M${px} ${py}l-${s/1.8} -${s}h${s/0.9}z`}[dir];
+    return E('path',{d,class:cls},g);}
+}
+function handle(plot,cls='',r=11,label=''){
+  const g=E('g',{class:'handle '+cls,tabindex:0,role:'button','aria-label':label},plot.gTop);
+  E('circle',{r:24,class:'hit'},g);
+  if(cls.includes('pill'))E('rect',{x:-18,y:-10,width:36,height:20,rx:10,class:'knob'},g);
+  else E('circle',{r,class:'knob'},g);
+  return g;
+}
+function place(g,plot,x,y){g.setAttribute('transform',`translate(${plot.X(x).toFixed(1)},${plot.Y(y).toFixed(1)})`);}
+function drag(plot,node,onMove,onEnd){
+  node.addEventListener('pointerdown',e=>{
+    e.preventDefault();e.stopPropagation();node.setPointerCapture(e.pointerId);node.classList.add('dragging');
+    const mv=ev=>onMove(plot.at(ev));
+    const up=()=>{node.classList.remove('dragging');node.removeEventListener('pointermove',mv);node.removeEventListener('pointerup',up);node.removeEventListener('pointercancel',up);onEnd&&onEnd();};
+    node.addEventListener('pointermove',mv);node.addEventListener('pointerup',up);node.addEventListener('pointercancel',up);
+  });
+}
+function keys(node,step,fn){node.addEventListener('keydown',e=>{const m={ArrowLeft:[-1,0],ArrowRight:[1,0],ArrowUp:[0,1],ArrowDown:[0,-1]}[e.key];if(m){e.preventDefault();fn(m[0]*step,m[1]*step);}});}
+function seg(root,attr,fn){root.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{root.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b?'true':'false'));fn(b.dataset[attr],b);}));}
+function setSeg(root,attr,val){root.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset[attr]===String(val))));}
+function tween(ms,step,done){if(reduce){step(1);done&&done();return()=>{};}let t0=null,stop=false;const f=t=>{if(stop)return;if(t0===null)t0=t;const p=Math.min(1,(t-t0)/ms);step(p);if(p<1)requestAnimationFrame(f);else done&&done();};requestAnimationFrame(f);return()=>{stop=true};}
+const ease=p=>p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2;
+function led(el,rows){el.innerHTML=rows.map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join('');}
+
+
+/* ---------- 一頁一畫面縮放 ---------- */
+const root=document.documentElement;let SCALE=1,curId=null,lastKey='';
+function visibleHeight(vh){
+  // 實際看得到的高度：視窗底部若超出螢幕或被 Dock 蓋住，扣掉那一段
+  let h=vh;
+  try{const top=(window.screenY||0)+Math.max(0,(outerHeight||0)-vh);const bottom=(screen.availTop||0)+(screen.availHeight||0);const v=bottom-top;if(screen.availHeight&&v>300&&v<h)h=v;}catch(e){}
+  return h;
+}
+function overflowPx(){ // 目前分頁超出畫布底部多少（設計座標）
+  if(!curId)return 0;const p=$('#p-'+curId);if(!p||p.hidden)return 0;
+  const pb=p.getBoundingClientRect().bottom;let b=pb;
+  p.querySelectorAll('*').forEach(e=>{if(e.closest('svg')&&e.tagName.toLowerCase()!=='svg')return;if(e.closest('.tests'))return;const r=e.getBoundingClientRect();if(r.height>0&&r.bottom>b)b=r.bottom;});
+  let over=(b-pb)/SCALE;
+  p.querySelectorAll('.col').forEach(c=>{over=Math.max(over,c.scrollHeight-c.clientHeight);});
+  return over;
+}
+function apply(app,W,H,w,h){
+  const sc=Math.min(w/W,h/H);SCALE=sc;
+  app.style.cssText=`width:${W}px;height:${H}px;left:${((w-W*sc)/2).toFixed(1)}px;top:${Math.max(0,(h-H*sc)/2).toFixed(1)}px;transform:scale(${sc.toFixed(4)})`;
+}
+function layout(){
+  const w=root.clientWidth||innerWidth,vh=innerHeight||root.clientHeight;
+  if(!w||!vh)return;
+  const h=visibleHeight(vh);
+  const app=$('.wrap'),slot=$('#T-stripslot'),strip=$('.strip'),stage=$('#p-track .stage');
+  if(w<620){root.classList.remove('fit','fit-l','fit-p');app.removeAttribute('style');SCALE=1;if(strip.parentNode!==stage)stage.appendChild(strip);return;}
+  const land=w/h>=0.95;let W,H;
+  if(land){W=1600;H=clamp(W*h/w,860,1000);}else{W=1000;H=clamp(W*h/w,1250,1800);}
+  root.classList.add('fit');root.classList.toggle('fit-l',land);root.classList.toggle('fit-p',!land);
+  if(strip.parentNode!==slot)slot.appendChild(strip);
+  apply(app,W,H,w,h);
+  // 每次都從基本高度重新量，內容放不下才加高（不會累積，視窗放大就會變回原尺寸）
+  const over=overflowPx();
+  if(over>2)apply(app,W,Math.ceil(H+over+14),w,h);
+}
+addEventListener('resize',layout);addEventListener('load',layout);addEventListener('pageshow',layout);
+document.addEventListener('visibilitychange',layout);
+if(window.ResizeObserver)new ResizeObserver(()=>layout()).observe(document.body);
+setInterval(layout,1000);
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(layout);
+layout();
+
+/* ---------- 資料 ---------- */
+const MOVES={1:{name:'定位',ask:'頂點在哪？開口向哪？',id:'locate',c:'var(--t1)'},2:{name:'對摺',ask:'誰跟誰一樣高？',id:'fold',c:'var(--t2)'},3:{name:'邊界',ask:'哪些 y 值到不了？',id:'bound',c:'var(--t3)'},4:{name:'追蹤',ask:'誰在動？怎麼動？',id:'track',c:'var(--t4)'}};
+const DATA=[
+  {y:111,q:'往上平移後，與 x 軸兩交點的和與距離',r:39.8,m:[4,2]},
+  {y:112,q:'用對稱性求兩頂點的距離',r:55.8,m:[2]},
+  {y:113,q:'由標準式判斷最大或最小值',r:69.7,m:[1]},
+  {y:114,q:'向右平移過程中，與 y 軸交點怎麼移動',r:44.1,m:[4]},
+  {y:115,q:'判斷甲、乙說的 y 坐標可不可能',r:62.2,m:[3,1]}];
+
+/* ---------- 路由 ---------- */
+const PANELS=['diagnose','locate','fold','bound','track','compass'];
+function show(id){
+  if(!PANELS.includes(id))id='diagnose';curId=id;
+  PANELS.forEach(p=>{$('#p-'+p).hidden=p!==id;const t=$('#tab-'+p);t.setAttribute('aria-selected',String(p===id));t.tabIndex=p===id?0:-1;});
+  layout();
+}
+$$('.tab').forEach(t=>t.addEventListener('click',()=>{const id=t.dataset.go;if(location.hash.slice(1)===id)show(id);else location.hash=id;}));
+$('.tabs').addEventListener('keydown',e=>{if(e.key!=='ArrowRight'&&e.key!=='ArrowLeft')return;const tabs=$$('.tab');const i=tabs.findIndex(t=>t.getAttribute('aria-selected')==='true');const n=tabs[(i+(e.key==='ArrowRight'?1:tabs.length-1))%tabs.length];n.focus();n.click();});
+addEventListener('hashchange',()=>{show(location.hash.slice(1));if(!root.classList.contains('fit'))scrollTo({top:0,behavior:reduce?'auto':'smooth'});});
+function go(id){location.hash=id;}
+
+/* ---------- 小圖示 ---------- */
+function glyph(m){
+  const grid=`<rect x="0" y="0" width="150" height="96" fill="var(--sheet)"/>`+Array.from({length:9},(_,i)=>`<line x1="${i*18+3}" y1="0" x2="${i*18+3}" y2="96" stroke="var(--grid)"/>`).join('')+Array.from({length:6},(_,i)=>`<line x1="0" y1="${i*18+6}" x2="150" y2="${i*18+6}" stroke="var(--grid)"/>`).join('');
+  const par=(h,k,a,cls='')=>{let d='';for(let i=0;i<=40;i++){const x=i/40*150;const y=k-a*Math.pow(x-h,2);d+=(i?'L':'M')+x.toFixed(1)+' '+y.toFixed(1);}return d;};
+  const s='stroke="var(--ink)" fill="none" stroke-width="2.6" stroke-linecap="round"';
+  if(m==1)return `<svg viewBox="0 0 150 96">${grid}<path d="${par(75,80,0.03)}" ${s}/><line x1="75" y1="10" x2="75" y2="92" stroke="var(--ink-2)" stroke-dasharray="3 4"/><circle cx="75" cy="80" r="7" fill="${MOVES[1].c}" stroke="var(--ink)" stroke-width="2"/><line x1="60" y1="80" x2="90" y2="80" stroke="var(--ink)" stroke-width="1.2"/></svg>`;
+  if(m==2)return `<svg viewBox="0 0 150 96">${grid}<path d="${par(75,84,0.028)}" ${s}/><line x1="75" y1="6" x2="75" y2="92" stroke="var(--ink-2)" stroke-dasharray="3 4"/><line x1="44" y1="57" x2="106" y2="57" stroke="${MOVES[2].c}" stroke-width="7" stroke-linecap="round"/><circle cx="44" cy="57" r="5" fill="var(--ink)"/><circle cx="106" cy="57" r="5" fill="var(--ink)"/><circle cx="75" cy="57" r="3.5" fill="var(--sheet)" stroke="var(--ink)" stroke-width="2"/></svg>`;
+  if(m==3)return `<svg viewBox="0 0 150 96"><defs><pattern id="gh3" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="7" stroke="var(--red)" stroke-width="1.2" opacity=".6"/></pattern></defs>${grid}<rect x="0" y="70" width="150" height="26" fill="url(#gh3)"/><line x1="0" y1="70" x2="150" y2="70" stroke="var(--red)" stroke-width="1.6" stroke-dasharray="5 4"/><path d="${par(75,70,0.03)}" ${s}/><path d="${par(75,70,0.008)}" stroke="var(--ink-3)" fill="none" stroke-width="1.4"/><circle cx="75" cy="70" r="6" fill="${MOVES[3].c}" stroke="var(--ink)" stroke-width="2"/></svg>`;
+  return `<svg viewBox="0 0 150 96">${grid}<path d="${par(45,80,0.04)}" stroke="var(--ink-3)" fill="none" stroke-width="2" stroke-dasharray="5 4"/><path d="${par(105,80,0.04)}" ${s}/><line x1="54" y1="86" x2="92" y2="86" stroke="${MOVES[4].c}" stroke-width="7" stroke-linecap="round"/><path d="M98 86l-9 -5v10z" fill="var(--ink)"/><circle cx="105" cy="80" r="5" fill="var(--ink)"/></svg>`;
+}
+
+/* ============ 診斷 ============ */
+(function(){
+  const lo=30,hi=80,pc=v=>(v-lo)/(hi-lo)*100;
+  $('#lrows').innerHTML=DATA.map(d=>{
+    const c=MOVES[d.m[0]].c;
+    return `<div class="lrow"><div class="yr">${d.y}</div><div class="gist">${d.q.replace(/ ([xy]) /g,' <i class="v">$1</i> ')}${d.m.map(m=>`<span class="mchip" style="background:${MOVES[m].c}">${MOVES[m].name}</span>`).join('')}</div>
+      <div class="track"><span class="stem" style="width:${pc(d.r)}%"></span><span class="bead" style="left:${pc(d.r)}%;background:${c}"></span><span class="rate" style="left:${pc(d.r)}%">${d.r}%</span></div></div>`;}).join('');
+  $('#lticks').innerHTML=[30,40,50,60,70,80].map(v=>`<span style="left:${pc(v)}%">${v}%</span>`).join('');
+  $('#moves').innerHTML=[1,2,3,4].map(m=>{const yrs=DATA.filter(d=>d.m.includes(m)).map(d=>d.y).join('、');
+    return `<button class="mv" style="--mc:${MOVES[m].c}" data-go="${MOVES[m].id}">${glyph(m)}<span class="nm"><span>${m}　${MOVES[m].name}</span></span><span class="ak">${MOVES[m].ask}</span><span class="yy">會考 ${yrs}</span></button>`;}).join('');
+  $$('.mv').forEach(b=>b.addEventListener('click',()=>go(b.dataset.go)));
+  // 50% 參考線，對齊軌道欄
+  const fig=$('#lolli');const line=document.createElement('div');line.className='half';fig.appendChild(line);
+  function pos(){const ts=fig.querySelectorAll('.track');if(!ts.length)return;const k=SCALE,fr=fig.getBoundingClientRect(),tr=ts[0].getBoundingClientRect(),tl=ts[ts.length-1].getBoundingClientRect();line.style.left=((tr.left-fr.left+tr.width*pc(50)/100)/k)+'px';line.style.top=((tr.top-fr.top)/k-6)+'px';line.style.height=((tl.bottom-tr.top)/k+12)+'px';line.style.bottom='auto';}
+  addEventListener('resize',pos);requestAnimationFrame(pos);setTimeout(pos,400);
+  new MutationObserver(pos).observe($('#p-diagnose'),{attributes:true});
+})();
+
+/* ============ 1 定位 ============ */
+(function(){
+  const P=new Plot($('#L-svg'),{ymin:-7,ymax:7});
+  const S={a:1,h:-3,k:2,mode:'free',q:null,g:{x:0,y:0},gd:0,checked:false,streak:0};
+  const V=handle(P,'',11,'頂點'),G=handle(P,'ring',12,'猜測的頂點');
+  drag(P,V,p=>{S.h=clamp(r2(p.x),-7,7);S.k=clamp(r2(p.y),-6,6);render();});
+  keys(V,0.5,(dx,dy)=>{S.h=clamp(S.h+dx,-7,7);S.k=clamp(S.k+dy,-6,6);render();});
+  drag(P,G,p=>{if(S.checked)return;S.g={x:clamp(Math.round(p.x),-7,7),y:clamp(Math.round(p.y),-6,6)};render();});
+  keys(G,1,(dx,dy)=>{if(S.checked)return;S.g={x:clamp(S.g.x+dx,-7,7),y:clamp(S.g.y+dy,-6,6)};render();});
+  const aR=$('#L-a');let lastA=1;
+  aR.addEventListener('input',()=>{let v=+aR.value;if(v===0){v=lastA>0?-0.25:0.25;aR.value=v;}lastA=v;S.a=v;render();});
+
+  function vertexLabel(a,h,k,txt){
+    const below=a>0;const y=k+(below?-0.6:0.6);
+    P.text(h,y,txt,'ann',0,below?14:-2,'middle');
+  }
+  function render(){
+    P.clear();const {a,h,k}=S;
+    if(S.mode==='free'){
+      V.style.display='';G.style.display='none';
+      P.curve(x=>a*x*x,'c-ghost',P.gBack);
+      P.dot(0,0,'dot-o',4.5,P.gBack);
+      // 平移路徑：先左右，再上下
+      if(!near(h,0)){P.line(0,0,h,0,'c-move',P.gBack);P.head(h,0,h>0?'r':'l','arrowhead',P.gBack);P.text(h/2,0,`${h>0?'右':'左'}移 ${fmt(Math.abs(h))}`,'ann sm',0,k>=0?22:-10,'middle');}
+      if(!near(k,0)){P.line(h,0,h,k,'c-move',P.gBack);P.head(h,k,k>0?'u':'d','arrowhead',P.gBack);P.text(h,k/2,`${k>0?'上':'下'}移 ${fmt(Math.abs(k))}`,'ann sm',h>=0?12:-12,5,h>=0?'start':'end');}
+      P.vline(h,'c-axis');
+      P.curve(x=>a*(x-h)**2+k,'c-main');
+      vertexLabel(a,h,k,`${a>0?'最低點':'最高點'} (${fmt(h)}, ${fmt(k)})`);
+      P.text(h,a>0?6.4:-6.6,`對稱軸 x = ${fmt(h)}`,'ann sm dim',8,0,'start');
+      place(V,P,h,k);
+    }else{
+      V.style.display='none';G.style.display='';
+      const q=S.q;
+      if(S.checked){
+        P.vline(q.h,'c-axis');P.curve(x=>q.a*(x-q.h)**2+q.k,'c-main');
+        P.dot(q.h,q.k,'dot-hl',7);
+        vertexLabel(q.a,q.h,q.k,`頂點 (${fmt(q.h)}, ${fmt(q.k)})`);
+      }
+      place(G,P,S.g.x,S.g.y);
+      P.text(S.g.x,S.g.y,`你放在 (${fmt(S.g.x)}, ${fmt(S.g.y)})`,'ann sm dim',16,-14,'start');
+    }
+    // 筆記欄
+    $('#L-av').textContent=fmt(a);
+    $('#L-eq').innerHTML=vform(a,h,k,true);
+    $('#L-trans').innerHTML=near(h,0)?'括號裡只有 <i class="v">x</i>：頂點在 <i class="v">y</i> 軸上，<i class="v">h</i> = 0。'
+      :`括號裡是 <b><i class="v">x</i> ${h>0?'−':'+'} ${fmt(Math.abs(h))}</b>。讓它等於 0 的是 <i class="v">x</i> = ${fmt(h)}，所以頂點的 <i class="v">x</i> 坐標是 <b>${fmt(h)}</b>，不是 ${fmt(-h)}。`;
+    const w=Math.abs(a)>1?'比 y = x² 窄':Math.abs(a)<1?'比 y = x² 寬':'和 y = x² 一樣寬';
+    led($('#L-led'),[
+      ['頂點',`(${fmt(h)}, ${fmt(k)})`],
+      ['對稱軸',`<i>x</i> = ${fmt(h)}`],
+      ['開口',`<span class="zh">${a>0?'向上':'向下'}，${w.replace('y = x²','<i>y</i> = <i>x</i><sup>2</sup>')}</span>`],
+      [a>0?'最小值':'最大值',`${fmt(k)} <span class="zh">（<i>x</i> = ${fmt(h)} 時）；沒有${a>0?'最大值':'最小值'}</span>`]
+    ]);
+  }
+  // 讀式練習
+  const pick=arr=>arr[Math.floor(Math.random()*arr.length)];
+  function newQ(){
+    let q;do{q={a:pick([1,-1,2,-2,0.5,-0.5,3,-3]),h:pick([-5,-4,-3,-2,-1,1,2,3,4,5]),k:pick([-5,-4,-3,-2,-1,0,1,2,3,4,5])};}while(S.q&&q.h===S.q.h&&q.k===S.q.k);
+    S.q=q;S.g={x:0,y:0};S.gd=0;S.checked=false;
+    $('#L-qeq').innerHTML=vform(q.a,q.h,q.k);setSeg($('#L-dir'),'d','x');
+    $('#L-fb').textContent='';$('#L-fb').className='fb';$('#L-next').hidden=true;$('#L-check').hidden=false;
+    render();
+  }
+  $('#L-start').addEventListener('click',()=>{S.mode='quiz';$('#p-locate .nb').classList.add('quizzing');$('#L-off').hidden=true;$('#L-on').hidden=false;$('#L-hint').textContent='讀右邊的式子，把空心圈拖到你認為的頂點。';newQ();});
+  $('#L-exit').addEventListener('click',()=>{S.mode='free';$('#p-locate .nb').classList.remove('quizzing');$('#L-off').hidden=false;$('#L-on').hidden=true;$('#L-hint').innerHTML='拖曳黃色頂點（也可以用方向鍵）。灰色虛線是原本的 <i class="v">y</i> = <i class="v">ax</i><sup>2</sup>，整條拋物線只是被搬過去。';render();});
+  seg($('#L-dir'),'d',d=>{S.gd=+d;});
+  $('#L-next').addEventListener('click',newQ);
+  $('#L-check').addEventListener('click',()=>{
+    const q=S.q,fb=$('#L-fb');
+    if(!S.gd){fb.className='fb no';fb.innerHTML='<b>還差一步：</b>先選開口向上或向下。';return;}
+    S.checked=true;
+    const okV=S.g.x===q.h&&S.g.y===q.k,okD=(S.gd>0)===(q.a>0);
+    let msg='';
+    if(okV&&okD){S.streak++;msg=`<b>對了。</b>頂點 (${fmt(q.h)}, ${fmt(q.k)})，開口${q.a>0?'向上，所以 '+fmt(q.k)+' 是最小值':'向下，所以 '+fmt(q.k)+' 是最大值'}。`;fb.className='fb ok';}
+    else{
+      S.streak=0;fb.className='fb no';
+      if(!okV){
+        if(S.g.x===-q.h&&S.g.y===q.k)msg=`<b>x 坐標反了。</b>括號裡是 x ${q.h>0?'−':'+'} ${Math.abs(q.h)}，要讓它等於 0，x 要等於 ${fmt(q.h)}。`;
+        else if(S.g.x===q.h&&S.g.y===-q.k)msg=`<b>y 坐標反了。</b>括號外面的 ${q.k>0?'+':'−'} ${Math.abs(q.k)} 不用變號，頂點的 y 坐標就是 ${fmt(q.k)}。`;
+        else if(S.g.x===-q.h&&S.g.y===-q.k)msg=`<b>兩個坐標都變了號。</b>只有括號裡的數要變號（x = ${fmt(q.h)}），外面的 ${fmt(q.k)} 直接照抄。`;
+        else msg=`<b>頂點是 (${fmt(q.h)}, ${fmt(q.k)})。</b>先找讓括號等於 0 的 x，再看括號外加了多少。`;
+      }
+      if(!okD)msg+=` <b>開口方向看 a：</b>a = ${fmt(q.a)} 是${q.a>0?'正':'負'}的，開口${q.a>0?'向上':'向下'}。`;
+    }
+    fb.innerHTML=msg;$('#L-streak').textContent=S.streak?`連續答對 ${S.streak} 題`+(S.streak>=3?'，可以往「對摺」前進了。':''):'';
+    $('#L-check').hidden=true;$('#L-next').hidden=false;render();
+  });
+  render();
+})();
+
+/* ============ 2 對摺 ============ */
+(function(){
+  const P=new Plot($('#F-svg'),{ymin:-7,ymax:7});
+  const S={a:0.5,h:1,k:-4,c:0,fold:0,folded:false,mode:'free',ch:null,gx:-3,checked:false};
+  const V=handle(P,'',11,'頂點'),K=handle(P,'pill',11,'水平刀片'),A=handle(P,'ring',12,'對稱軸'),M=handle(P,'ring',12,'對稱點');
+  drag(P,V,p=>{S.h=clamp(r2(p.x),-6,6);S.k=clamp(r2(p.y),-6,6);render();});
+  keys(V,0.5,(dx,dy)=>{S.h=clamp(S.h+dx,-6,6);S.k=clamp(S.k+dy,-6,6);render();});
+  drag(P,K,p=>{S.c=clamp(r2(p.y),-6.5,6.5);render();});
+  keys(K,0.5,(dx,dy)=>{S.c=clamp(S.c+dy,-6.5,6.5);render();});
+  drag(P,A,p=>{if(S.checked)return;S.gx=clamp(r2(p.x),-7.5,7.5);render();});
+  keys(A,0.5,(dx)=>{if(S.checked)return;S.gx=clamp(S.gx+dx,-7.5,7.5);render();});
+  drag(P,M,p=>{if(S.checked)return;S.gx=clamp(r2(p.x),-7.5,7.5);render();});
+  keys(M,0.5,(dx)=>{if(S.checked)return;S.gx=clamp(S.gx+dx,-7.5,7.5);render();});
+  const aside=$('#p-fold .nb');
+  const aCtl=document.createElement('div');aCtl.className='ctl';aCtl.innerHTML='<label for="F-a"><i class="v">a</i> = <output id="F-av">0.5</output></label><input type="range" id="F-a" min="-2" max="2" step="0.25" value="0.5">';
+  $('#F-free').prepend(aCtl);
+  const aR=$('#F-a');let lastA=.5;aR.addEventListener('input',()=>{let v=+aR.value;if(v===0){v=lastA>0?-0.25:0.25;aR.value=v;}lastA=v;S.a=v;render();});
+
+  function eqTicks(x1,x2,y){ // 等長記號 ||
+    const mx=P.X((x1+x2)/2),my=P.Y(y);
+    [-3,3].forEach(o=>E('line',{x1:mx+o,x2:mx+o,y1:my-8,y2:my+8,class:'c-tick'},P.gMain));
+  }
+  function render(){
+    P.clear();
+    const free=S.mode==='free';
+    V.style.display=free?'':'none';K.style.display=free?'':'none';
+    A.style.display=S.mode==='axis'?'':'none';M.style.display=S.mode==='mirror'?'':'none';
+    if(free){
+      const {a,h,k,c}=S;
+      P.vline(h,'c-axis');
+      P.hline(c,'c-knife');
+      const f=x=>a*(x-h)**2+k;
+      const t=(c-k)/a;
+      if(S.fold>0){ // 左半邊摺過去
+        const cs=Math.cos(Math.PI*S.fold);
+        const d=P.path(x=>f(x),h-12,h,160).replace(/([ML])([\d.\-]+) ([\d.\-]+)/g,(m,cmd,px,py)=>{const ux=P.ux(+px);return cmd+P.X(h-(h-ux)*cs).toFixed(1)+' '+py;});
+        E('path',{d,class:'c-fold'},P.gBack);
+      }
+      P.curve(f,'c-main');
+      if(t>=-1e-9){
+        const d=Math.sqrt(Math.max(0,t)),x1=h-d,x2=h+d;
+        if(d>1e-6){
+          P.line(x1,c,h,c,'c-hl sm',P.gBack);P.line(h,c,x2,c,'c-hl sm',P.gBack);
+          eqTicks(x1,h,c);eqTicks(h,x2,c);
+          const cs=Math.cos(Math.PI*S.fold);const px=h-d*cs;
+          P.dot(px,c,'dot',6);P.dot(x2,c,'dot',6);
+          P.dot(h,c,'dot-o',5);
+          const up=a>0?-14:26;
+          P.text(x1,c,`x₁ = ${fmt(x1)}`,'mth',-8,up,'end');
+          P.text(x2,c,`x₂ = ${fmt(x2)}`,'mth',8,up,'start');
+          P.text(h,c,`中點 ${fmt(h)}`,'ann sm',0,a>0?26:-14,'middle');
+        }else{P.dot(h,c,'dot-hl',7);P.text(h,c,'只切到頂點','ann sm',10,-12);}
+      }else{
+        P.text(P.xmin+0.4,c,'這條水平線碰不到拋物線','ann sm red',0,-10,'start');
+      }
+      if(near(c,0)&&t>0)P.text(P.xmax-0.4,0,'這時就是與 x 軸的兩個交點','ann sm dim',0,48,'end');
+      place(V,P,h,k);place(K,P,P.xmax-0.7,c);
+      // 筆記欄
+      $('#F-av').textContent=fmt(a);
+      if(t>1e-9){
+        const d=Math.sqrt(t),x1=h-d,x2=h+d;
+        led($('#F-led'),[
+          ['左邊的點',`<i>x</i>₁ = ${fmt(x1)}`],['右邊的點',`<i>x</i>₂ = ${fmt(x2)}`],
+          ['兩數的和',`<i>x</i>₁ + <i>x</i>₂ = ${fmt(x1+x2)} = 2 × ${fmt(h)}`],
+          ['正中間',`(<i>x</i>₁ + <i>x</i>₂) ÷ 2 = ${fmt(h)} <span class="zh">＝對稱軸</span>`],
+          ['兩點距離',`<i>x</i>₂ − <i>x</i>₁ = ${fmt(2*d)}`]]);
+        $('#F-note').innerHTML=`拖刀片看看：<b>距離</b>一直在變，<b>中點</b>永遠停在 <i class="v">x</i> = ${fmt(h)}。`;
+      }else{
+        led($('#F-led'),[['交點',t<0?'<span class="zh">沒有</span>':`<span class="zh">只有頂點</span> (${fmt(h)}, ${fmt(k)})`]]);
+        $('#F-note').innerHTML=t<0?'刀片在頂點的另一邊，切不到。往回拖一點。':'刀片剛好貼在頂點：兩點合成一點。';
+      }
+    }else{
+      const q=S.ch;
+      if(S.mode==='axis'){
+        const xA=q.h-q.d,xB=q.h+q.d;
+        if(S.checked){q.fam.forEach((aa,i)=>P.curve(x=>aa*(x-q.h)**2+(q.c-aa*q.d*q.d),i===1?'c-main thin':'c-fam'));P.vline(q.h,'c-axis');}
+        P.line(xA,q.c,xB,q.c,'c-knife');
+        P.vline(S.gx,'c-red');
+        P.dot(xA,q.c,'dot',6.5);P.dot(xB,q.c,'dot',6.5);
+        P.text(xA,q.c,`A(${fmt(xA)}, ${fmt(q.c)})`,'mth',0,-14,'middle');P.text(xB,q.c,`B(${fmt(xB)}, ${fmt(q.c)})`,'mth',0,-14,'middle');
+        P.text(S.gx,P.ymax-1.2,`x = ${fmt(S.gx)}`,'mth',10,4,'start');
+        place(A,P,S.gx,P.ymax-0.6);
+      }else{
+        const xA=q.xA;
+        if(S.checked){P.curve(x=>q.a*(x-q.h)**2+(q.c-q.a*q.d*q.d),'c-main thin');}
+        P.vline(q.h,'c-axis');P.hline(q.c,'c-knife');
+        P.text(q.h,P.ymax-0.6,`對稱軸 x = ${fmt(q.h)}`,'mth',8,4,'start');
+        P.dot(xA,q.c,'dot',6.5);P.text(xA,q.c,`A(${fmt(xA)}, ${fmt(q.c)})`,'mth',0,-14,'middle');
+        place(M,P,S.gx,q.c);
+        P.text(S.gx,q.c,`(${fmt(S.gx)}, ${fmt(q.c)})`,'mth',0,30,'middle');
+      }
+    }
+  }
+  // 對摺動畫
+  let stopF=()=>{};
+  $('#F-fold').addEventListener('click',()=>{
+    stopF();const from=S.fold,to=S.folded?0:1;S.folded=!S.folded;$('#F-fold').textContent=S.folded?'攤開':'沿對稱軸對摺';
+    stopF=tween(1000,p=>{S.fold=from+(to-from)*ease(p);render();});
+  });
+  // 挑戰
+  const pick=arr=>arr[Math.floor(Math.random()*arr.length)];
+  function newCh(){
+    const h=pick([-3,-2,-1,1,2,3,0.5,-0.5,1.5,-1.5]),d=pick([1.5,2,2.5,3,3.5,4]),c=pick([-4,-3,-2,2,3,4]);
+    const sg=c>0?-1:1;
+    S.ch={h,d,c,fam:[sg*0.25,sg*0.5,sg*1],a:sg*0.5,xA:pick([h-d,h+d])};S.checked=false;
+    S.gx=S.mode==='axis'?clamp(h+pick([-3,3,-2.5,2.5]),-7,7):clamp(2*h-S.ch.xA+pick([-2,2,1.5,-1.5]),-7,7);
+    $('#F-chq').innerHTML=S.mode==='axis'
+      ?'A、B 兩點一樣高，都在某一條拋物線上。<b>拋物線藏起來了</b>，拖曳紅色虛線，把它放到對稱軸的位置。'
+      :'已知對稱軸和拋物線上的一點 A。拋物線上還有一點和 A 一樣高，<b>拖曳空心圈</b>把它找出來。';
+    $('#F-fb').textContent='';$('#F-fb').className='fb';render();
+  }
+  $('#F-check').addEventListener('click',()=>{
+    const q=S.ch,fb=$('#F-fb');S.checked=true;
+    if(S.mode==='axis'){
+      const ok=near(S.gx,q.h);const xA=q.h-q.d,xB=q.h+q.d;
+      fb.className='fb '+(ok?'ok':'no');
+      fb.innerHTML=ok?`<b>對了。</b>(${fmt(xA)} + ${fmt(xB)}) ÷ 2 = ${fmt(q.h)}。圖上畫了三條不同的拋物線，它們的 a 都不一樣，對稱軸卻都在 x = ${fmt(q.h)}。`
+        :`<b>不是 ${fmt(S.gx)}。</b>A、B 一樣高，軸到兩點要一樣遠：(${fmt(xA)} + ${fmt(xB)}) ÷ 2 = ${fmt(q.h)}。`;
+    }else{
+      const ans=2*q.h-q.xA,ok=near(S.gx,ans);
+      fb.className='fb '+(ok?'ok':'no');
+      fb.innerHTML=ok?`<b>對了。</b>A 在軸的${q.xA<q.h?'左':'右'}邊 ${fmt(Math.abs(q.h-q.xA))} 格，另一點就在${q.xA<q.h?'右':'左'}邊 ${fmt(Math.abs(q.h-q.xA))} 格：x = 2 × ${fmt(q.h)} − (${fmt(q.xA)}) = ${fmt(ans)}。`
+        :`<b>再看一次距離。</b>A 到軸是 ${fmt(Math.abs(q.h-q.xA))} 格，另一點要在軸的另一邊同樣遠，答案是 x = ${fmt(ans)}。`;
+    }
+    render();
+  });
+  $('#F-new').addEventListener('click',newCh);
+  seg($('#F-mode'),'m',m=>{S.mode=m;$('#F-free').hidden=m!=='free';$('#F-ch').hidden=m==='free';
+    $('#F-hint').textContent=m==='free'?'上下拖曳右邊的刀片，看水平線切到的兩點；拖曳頂點換一條拋物線。按「沿對稱軸對摺」看左右兩半疊在一起。':'拋物線先藏起來。只靠「一樣高」這個線索，判斷位置。';
+    if(m!=='free')newCh();else render();});
+  render();
+})();
+
+/* ============ 3 邊界 ============ */
+(function(){
+  const svg=$('#B-svg');const P=new Plot(svg,{ymin:-7,ymax:7});
+  const S={h:1,k:-2,dir:1,c:2,pts:[{x:4,y:1},{x:-2,y:-4},{x:1,y:3},{x:-3,y:5}],sel:0};
+  const V=handle(P,'',11,'頂點'),C=handle(P,'pill',11,'掃描線');
+  drag(P,V,p=>{S.h=clamp(r2(p.x),-6,6);S.k=clamp(r2(p.y),-5.5,5.5);render();});
+  keys(V,0.5,(dx,dy)=>{S.h=clamp(S.h+dx,-6,6);S.k=clamp(S.k+dy,-5.5,5.5);render();});
+  drag(P,C,p=>{S.c=clamp(r2(p.y),-6.5,6.5);render();});
+  keys(C,0.5,(dx,dy)=>{S.c=clamp(S.c+dy,-6.5,6.5);render();});
+  svg.addEventListener('click',e=>{if(e.target.closest('.handle'))return;const p=P.at(e);const pt={x:clamp(r2(p.x),-7.5,7.5),y:clamp(r2(p.y),-6.5,6.5)};
+    const i=S.pts.findIndex(q=>q.x===pt.x&&q.y===pt.y);if(i>=0)S.pts.splice(i,1);S.pts.unshift(pt);if(S.pts.length>8)S.pts.pop();S.sel=0;render();});
+  seg($('#B-dir'),'d',d=>{S.dir=+d;render();});
+  $('#B-clear').addEventListener('click',()=>{S.pts=[];render();});
+  const FAM=[0.15,0.3,0.6,1.2,3];
+  function judge(p){
+    const {h,k,dir}=S,up=dir>0;
+    if(near(p.x,h)&&near(p.y,k))return{ok:true,a:null,why:'就是頂點，每一條都經過。'};
+    if(near(p.x,h))return{ok:false,why:`在對稱軸 x = ${fmt(h)} 上。拋物線在這條線上只有頂點一個點。`};
+    if(near(p.y,k))return{ok:false,why:`y = ${fmt(k)} 只出現在頂點；其他 x 的 y 都${up?'比它大':'比它小'}。`};
+    if(up&&p.y<k)return{ok:false,why:`開口向上，y 最小就是 ${fmt(k)}，${fmt(p.y)} 到不了。`};
+    if(!up&&p.y>k)return{ok:false,why:`開口向下，y 最大就是 ${fmt(k)}，${fmt(p.y)} 到不了。`};
+    const a=(p.y-k)/(p.x-h)**2;
+    return{ok:true,a,why:`a = ${fmt(a,3)} 的那一條會經過。`};
+  }
+  function render(){
+    P.clear();const {h,k,dir,c}=S,up=dir>0;
+    // 到不了的區域
+    const yTop=up?P.Y(k):0,ht=up?P.H-P.Y(k):P.Y(k);
+    E('rect',{x:0,y:yTop,width:P.W,height:Math.max(0,ht),fill:`url(#${P.id}h)`},P.gBack);
+    P.hline(k,'c-red',P.gBack);
+    P.text(P.xmin+0.4,k,up?`牆：y = ${fmt(k)}　以下都到不了`:`牆：y = ${fmt(k)}　以上都到不了`,'ann sm red',0,up?24:-10,'start');
+    P.vline(h,'c-red',P.gBack);
+    P.text(h,up?-6.4:6.1,'對稱軸上只有頂點','ann sm red',8,0,'start');
+    // 一族拋物線
+    FAM.forEach(a=>P.curve(x=>dir*a*(x-h)**2+k,'c-fam'));
+    const sel=S.pts[S.sel];let sj=null;
+    if(sel){sj=judge(sel);if(sj.ok&&sj.a!=null)P.curve(x=>sj.a*(x-h)**2+k,'c-main thin');}
+    // 掃描線
+    P.hline(c,'c-knife');
+    const reach=(c-k)*dir;
+    if(reach>1e-9)FAM.forEach(a=>{const d=Math.sqrt(reach/a);[h-d,h+d].forEach(x=>{if(x>P.xmin&&x<P.xmax)P.dot(x,c,'dot',3.6);});});
+    const n=reach>1e-9?2:near(reach,0)?1:0;
+    P.text(P.xmin+1.5,c,`y = ${fmt(c)}：${n} 個 x`,'ann',4,-10,'start');
+    P.dot(h,k,'dot-hl',6);
+    // 測試點
+    S.pts.forEach((p,i)=>{const j=judge(p);const cx=P.X(p.x),cy=P.Y(p.y);
+      if(j.ok)E('circle',{cx,cy,r:i===S.sel?8:6.5,class:'dot-ok'},P.gLab);
+      else{const s=i===S.sel?8:6;E('line',{x1:cx-s,y1:cy-s,x2:cx+s,y2:cy+s,class:'x-no'},P.gLab);E('line',{x1:cx-s,y1:cy+s,x2:cx+s,y2:cy-s,class:'x-no'},P.gLab);}
+      if(i===S.sel)P.text(p.x,p.y,`(${fmt(p.x)}, ${fmt(p.y)})`,'mth',12,-10,'start');
+    });
+    place(V,P,h,k);place(C,P,P.xmin+0.7,c);
+    // 筆記欄
+    led($('#B-led'),[['頂點',`(${fmt(h)}, ${fmt(k)})`],['開口',`<span class="zh">${up?'向上':'向下'}</span>`],['a',`<span class="zh">不知道（${up?'正數':'負數'}）</span>`],['y 的範圍',`<i>y</i> ${up?'≥':'≤'} ${fmt(k)}`]]);
+    $('#B-scan').innerHTML=n===2?`掃描線 <i class="v">y</i> = ${fmt(c)}：不管 <i class="v">a</i> 是多少，每一條都在這個高度切到 <b>2 個點</b>，而且左右對稱。`
+      :n===1?`掃描線剛好在頂點高度：每一條都<b>只碰到頂點</b>。`
+      :`掃描線在牆外：<b>沒有任何一條</b>碰得到。`;
+    const ul=$('#B-tests');
+    if(!S.pts.length){ul.innerHTML='<li style="cursor:default"><span></span><span class="why">還沒有測試點。點一下圖上任何位置。</span></li>';return;}
+    ul.innerHTML=S.pts.map((p,i)=>{const j=judge(p);return `<li data-i="${i}" class="${i===S.sel?'sel':''}"><span class="pt">(${fmt(p.x)}, ${fmt(p.y)})</span><span><span class="chip ${j.ok?'yes':'no'}">${j.ok?'可能':'不可能'}</span></span><span class="why">${j.why}</span></li>`;}).join('');
+    ul.querySelectorAll('li[data-i]').forEach(li=>li.addEventListener('click',()=>{S.sel=+li.dataset.i;render();}));
+  }
+  render();
+})();
+
+/* ============ 4 追蹤 ============ */
+function Predict(root,q,opts){
+  root.innerHTML=`<p class="pq">先猜：${q}</p><div class="popts">${opts.map((o,i)=>`<button class="popt" data-i="${i}">${o}</button>`).join('')}</div><p class="pres" hidden></p>`;
+  let pick=null,done=false;
+  root.querySelectorAll('.popt').forEach(b=>b.addEventListener('click',()=>{if(done)return;pick=+b.dataset.i;root.querySelectorAll('.popt').forEach(x=>x.classList.toggle('on',x===b));}));
+  return{
+    reveal(ans,ex){if(done)return;done=true;root.querySelectorAll('.popt').forEach((x,i)=>{x.classList.remove('on');x.classList.toggle('right',i===ans);x.classList.toggle('wrong',i===pick&&i!==ans);});const r=root.querySelector('.pres');r.hidden=false;r.innerHTML=(pick===null?'':pick===ans?'<b>你猜對了。</b>':'<b>和你猜的不一樣。</b>')+ex;},
+    reset(){done=false;pick=null;root.querySelectorAll('.popt').forEach(x=>x.className='popt');root.querySelector('.pres').hidden=true;},
+    get done(){return done}
+  };
+}
+(function(){
+  const P=new Plot($('#T-svg'),{ymin:-7,ymax:9,H:640});
+  const SH=new Plot($('#T-strip-h-svg'),{xmin:-6.8,xmax:6.8,ymin:-7.5,ymax:8.5,W:640,H:300,step:2,minor:1,xname:'h',yname:'',xt:'頂點的 x 坐標',yt:'y 軸交點的 y 坐標'});
+  const SV=new Plot($('#T-strip-v-svg'),{xmin:-6.8,xmax:3.8,ymin:-1.5,ymax:11.5,W:640,H:300,step:2,minor:1,xname:'k',yname:'',xt:'頂點的 y 坐標',yt:'兩交點的距離'});
+  const S={mode:'h',a:0.25,kH:-3,h:-6,hV:1,kV:-6,recH:new Map(),recV:new Map(),prevYi:null,arrow:0,cut:true};
+  const V=handle(P,'',11,'頂點');
+  drag(P,V,p=>{stop();if(S.mode==='h'){setH(clamp(r4(p.x),-6,6));}else{setK(clamp(r4(p.y),-6,3));}});
+  keys(V,0.25,(dx,dy)=>{stop();if(S.mode==='h')setH(clamp(S.h+dx,-6,6));else setK(clamp(S.kV+dy,-6,3));});
+  const pH=Predict($('#T-ph'),'頂點從 x = −6 一路向右移到 x = 6，拋物線和 y 軸的交點會怎麼移動？',['一直往上','一直往下','先往下，再往上','先往上，再往下','不動']);
+  const pV1=Predict($('#T-pv1'),'拋物線往上平移，和 x 軸的兩個交點，它們的「和」會？',['變大','變小','不變']);
+  const pV2=Predict($('#T-pv2'),'那兩交點的「距離」會？',['變大','變小','不變']);
+  let stopA=()=>{};function stop(){stopA();stopA=()=>{};}
+  function setH(h){S.h=h;$('#T-hr').value=h;render();}
+  function setK(k){S.kV=k;$('#T-kr').value=k;render();}
+  $('#T-hr').addEventListener('input',e=>{stop();setH(+e.target.value);});
+  $('#T-kr').addEventListener('input',e=>{stop();setK(+e.target.value);});
+  $('#T-playh').addEventListener('click',()=>{stop();S.recH.clear();S.prevYi=null;const from=-6;stopA=tween(5200,p=>{S.h=from+12*p;$('#T-hr').value=S.h;render();});});
+  $('#T-playv').addEventListener('click',()=>{stop();S.recV.clear();const from=-6;stopA=tween(4600,p=>{S.kV=from+9*p;$('#T-kr').value=S.kV;render();});});
+  seg($('#T-mode'),'m',m=>{stop();S.mode=m;$('#T-h').hidden=m!=='h';$('#T-v').hidden=m!=='v';$('#T-strip-h-svg').toggleAttribute('hidden',m!=='h');$('#T-strip-v-svg').toggleAttribute('hidden',m!=='v');
+    $('#T-strip-h').textContent=m==='h'?'記錄紙：y 軸交點跟著頂點怎麼變':'記錄紙：兩交點的距離與和，跟著頂點怎麼變';render();});
+  seg($('#T-sign'),'s',s=>{stop();S.a=0.25*(+s);S.kH=s>0?-3:3;S.recH.clear();S.prevYi=null;pH.reset();setH(-6);});
+
+  function render(){
+    P.clear();
+    if(S.mode==='h'){
+      const {a,h}=S,k=S.kH,f=x=>a*(x-h)**2+k,yi=a*h*h+k;
+      if(S.prevYi!==null&&Math.abs(yi-S.prevYi)>1e-6)S.arrow=Math.sign(yi-S.prevYi);
+      S.prevYi=yi;
+      S.recH.set(r4(h),yi);
+      // 起點的影子
+      P.curve(x=>a*(x+6)**2+k,'c-ghost',P.gBack);
+      P.vline(h,'c-axis');
+      P.curve(f,'c-main');
+      // y 軸上的足跡
+      [...S.recH.values()].forEach(v=>{const y=P.Y(v);E('line',{x1:P.X(0)-5,x2:P.X(0)+5,y1:y,y2:y,class:'c-tick'},P.gBack);});
+      P.line(0,yi-0.01,0,yi+0.01,'c-hl',P.gBack);
+      P.dot(0,yi,'dot-hl',8);
+      if(S.arrow){const ay=yi+S.arrow*0.9;P.line(0.55,yi,0.55,ay,'c-trace');P.head(0.55,ay+S.arrow*0.15,S.arrow>0?'u':'d','arrowhead ink');}
+      P.text(0,yi,`(0, ${fmt(yi)})`,'mth',22,5,'start');
+      if(Math.abs(h)<0.15)P.text(0,yi,'頂點正好在 y 軸上：交點就是頂點，這是轉彎的地方','ann sm',22,a>0?30:-18,'start');
+      P.dot(h,k,'dot',4);
+      place(V,P,h,k);
+      // 記錄紙
+      SH.clear();
+      SH.curve(x=>a*x*x+k,'c-ghost',SH.gBack,-6,6);
+      const pts=[...S.recH.entries()].sort((p,q)=>p[0]-q[0]);
+      pts.forEach(([x,y])=>SH.dot(x,y,'dot',2.6));
+      SH.dot(h,yi,'dot-hl',6.5);
+      SH.line(h,yi,h,0,'c-axis');
+      const xs=pts.map(p=>p[0]);const span=xs.length?[Math.min(...xs),Math.max(...xs)]:[0,0];
+      if(span[0]<=-2&&span[1]>=2){
+        SH.text(0,k,a>0?'最低點：h = 0':'最高點：h = 0','ann sm',8,a>0?22:-10,'start');
+        if(!pH.done)pH.reveal(a>0?2:3,`頂點還在 y 軸左邊時，交點往${a>0?'下':'上'}；頂點越過 y 軸之後，交點改往${a>0?'上':'下'}。記錄紙上的點排成一條拋物線：y 軸交點 = ${fmt(a)}h² ${k<0?'−':'+'} ${Math.abs(k)}。`);
+      }
+      $('#T-hv').textContent=fmt(h);
+      $('#T-eq').innerHTML=vform(a,+h.toFixed(2),k);
+      led($('#T-led'),[['y 軸交點',`(0, ${fmt(yi)})`],['它的算法',`<i>a</i>·<i>h</i><sup>2</sup> + <i>k</i> = ${fmt(a)} × (${fmt(h)})<sup>2</sup> ${k<0?'−':'+'} ${Math.abs(k)}`],['正在',`<span class="zh">${S.arrow>0?'往上':S.arrow<0?'往下':'—'}</span>`]]);
+    }else{
+      const a=0.25,h=S.hV,k=S.kV,f=x=>a*(x-h)**2+k,t=-k/a;
+      P.curve(x=>a*(x-h)**2-6,'c-ghost',P.gBack);
+      P.vline(h,'c-axis');P.curve(f,'c-main');
+      let dist=null;
+      if(t>1e-9){const d=Math.sqrt(t),x1=h-d,x2=h+d;dist=2*d;
+        P.line(x1,0,x2,0,'c-hl sm',P.gBack);
+        P.dot(x1,0,'dot',6.5);P.dot(x2,0,'dot',6.5);P.dot(h,0,'dot-o',5);
+        P.text(x1,0,`x₁ = ${fmt(x1)}`,'mth',-6,-12,'end');P.text(x2,0,`x₂ = ${fmt(x2)}`,'mth',6,-12,'start');
+        P.text(h,0,'中點不動','ann sm',0,26,'middle');
+      }else if(t>-1e-9){dist=0;P.dot(h,0,'dot-hl',7);P.text(h,0,'相切：兩個交點合成一點','ann sm',10,-14,'start');}
+      else P.text(h,k,'離開 x 軸：沒有交點了','ann sm red',12,-14,'start');
+      P.dot(h,k,'dot',4);place(V,P,h,k);
+      if(dist!==null)S.recV.set(r4(k),dist);
+      SV.clear();
+      SV.hline(2*h,'c-red',SV.gBack);SV.text(-6.6,2*h,`兩交點的和 = 2h = ${fmt(2*h)}（一直不變）`,'ann sm red',0,-8,'start');
+      [...S.recV.entries()].forEach(([x,y])=>SV.dot(x,y,'dot',2.6));
+      if(dist!==null){SV.dot(k,dist,'dot-hl',6.5);}
+      const ks=[...S.recV.keys()];
+      if(ks.length&&Math.min(...ks)<=-4&&Math.max(...ks)>=-1){
+        if(!pV1.done)pV1.reveal(2,`對稱軸 x = ${fmt(h)} 沒動，兩交點左右對稱，和永遠是 2 × ${fmt(h)} = ${fmt(2*h)}。`);
+        if(!pV2.done)pV2.reveal(1,'越往上，水平線 y = 0 越靠近頂點，切到的兩點越靠近，貼到頂點時距離變成 0。');
+      }
+      $('#T-kv').textContent=fmt(k);
+      $('#T-eq').innerHTML=vform(a,h,+k.toFixed(2));
+      led($('#T-led'),dist&&dist>0?[['兩交點的和',`<i>x</i>₁ + <i>x</i>₂ = ${fmt(2*h)} <span class="zh">（不變）</span>`],['兩交點的距離',`${fmt(dist)} <span class="zh">（在變）</span>`],['交點個數','<span class="zh">2 個</span>']]
+        :[['交點個數',`<span class="zh">${dist===0?'1 個（相切）':'0 個'}</span>`]]);
+    }
+  }
+  render();
+})();
+
+/* ============ 羅盤 ============ */
+(function(){
+  const CLUES=[
+    {g:'題目給你',t:'式子寫成 y = a(x − h)² + k',m:1,ask:'頂點是 (h, k) 嗎？括號裡的數記得變號。',do:'在草稿紙上畫出對稱軸 x = h，點出頂點。'},
+    {g:'題目給你',t:'兩個點的 y 坐標一樣',m:2,ask:'這兩點對稱於誰？對稱軸就在兩點正中間。',do:'把兩點連成水平線段，標出中點，畫一條垂直虛線。'},
+    {g:'題目給你',t:'圖形往上、下、左、右平移',m:4,ask:'平移後誰不變？形狀和 a 不變；左右平移改 h，上下平移改 k。',do:'畫出平移前和平移後的頂點，用箭頭連起來。'},
+    {g:'題目給你',t:'只知道開口方向，不知道 a',m:3,ask:'頂點的 y 坐標是最大還是最小？哪一邊是到不了的？',do:'在頂點高度畫一條水平線，把到不了的那一側斜線劃掉。'},
+    {g:'題目給你',t:'甲、乙兩人各說一句話',m:3,ask:'每一句話對應圖上的哪一個點？那個點在牆內還是牆外？',do:'把甲、乙說的點都點在草稿圖上，一個一個檢查。'},
+    {g:'題目問你',t:'最大值或最小值是多少',m:1,ask:'開口向上還是向下？頂點是最低點還是最高點？',do:'看 a 的正負，在頂點旁寫「最低」或「最高」。'},
+    {g:'題目問你',t:'與 x 軸兩交點的和或中點',m:2,ask:'兩交點一樣高（y = 0），和就是 2h。需要真的解出交點嗎？',do:'畫對稱軸，標出兩交點到軸一樣遠。'},
+    {g:'題目問你',t:'兩點之間的距離',m:2,ask:'能不能先找到軸，再算一邊的距離乘以 2？',do:'從對稱軸往兩邊畫等長的線段，標上 || 記號。'},
+    {g:'題目問你',t:'某個交點「怎麼移動」',m:4,ask:'這個交點的坐標怎麼用 h 或 k 寫出來？它會不會轉彎？',do:'挑三個位置（頂點在軸左、在軸上、在軸右）各畫一次。'},
+    {g:'題目問你',t:'某個 y 值可不可能出現',m:3,ask:'這個 y 值在頂點的哪一邊？如果在對稱軸上，只能是頂點。',do:'畫出牆（頂點的水平線），把那個 y 值標上去看看。'}
+  ];
+  const groups=['題目給你','題目問你'];
+  $('#clues').innerHTML=`<p class="hand">在紙上讀題時，先圈出題目給你什麼、問你什麼。點一個線索，羅盤會指向該用的動作。</p>`+groups.map(g=>`<div class="clue-g"><h3>${g}…</h3><div class="clue-list">${CLUES.map((c,i)=>c.g===g?`<button class="clue" style="--mc:${MOVES[c.m].c}" data-i="${i}" aria-pressed="false">${c.t.replace(/([a-z])/g,'<i class="v">$1</i>')}</button>`:'').join('')}</div></div>`).join('');
+  // 羅盤
+  const d=$('#dial'),cx=150,cy=150;
+  E('circle',{cx,cy,r:138,class:'dial-rim'},d);
+  for(let i=0;i<72;i++){const a=i*5*Math.PI/180,big=i%18===0,r1=big?118:128;E('line',{x1:cx+Math.sin(a)*r1,y1:cy-Math.cos(a)*r1,x2:cx+Math.sin(a)*134,y2:cy-Math.cos(a)*134,class:'dial-tick'+(big?' big':'')},d);}
+  [1,2,3,4].forEach((m,i)=>{const a=i*Math.PI/2,x=cx+Math.sin(a)*90,y=cy-Math.cos(a)*90;E('circle',{cx:x,cy:y,r:24,fill:MOVES[m].c,class:'dial-pad'},d);E('text',{x,y,class:'dial-lab'},d,MOVES[m].name);});
+  const nd=E('g',{class:'needle'},d);
+  E('path',{d:`M${cx} ${cy-62} L${cx+9} ${cy} L${cx-9} ${cy}Z`,class:'needle-a'},nd);
+  E('path',{d:`M${cx} ${cy+50} L${cx+9} ${cy} L${cx-9} ${cy}Z`,class:'needle-b'},nd);
+  E('circle',{cx,cy,r:7,class:'dial-cap'},d);
+  let rot=0;
+  const adv=$('#advice');
+  adv.innerHTML='<h3><span>先讀線索</span></h3><dl><dt>怎麼用</dt><dd>左邊點一個你在題目裡看到的線索。一題常常有兩三個線索，依序點過去，就是解題的順序。</dd></dl>';
+  $$('.clue').forEach(b=>b.addEventListener('click',()=>{
+    $$('.clue').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));
+    const c=CLUES[+b.dataset.i],target=(c.m-1)*90;
+    let delta=((target-rot)%360+360)%360;if(delta>180)delta-=360;rot+=delta;
+    nd.style.transform=`rotate(${rot}deg)`;
+    const yrs=DATA.filter(x=>x.m.includes(c.m)).map(x=>`${x.y}（${x.r}%）`).join('、');
+    adv.style.setProperty('--mc',MOVES[c.m].c);
+    adv.innerHTML=`<h3><span>${c.m}　${MOVES[c.m].name}</span></h3><dl><dt>先問自己</dt><dd>${c.ask}</dd><dt>草稿紙上先做</dt><dd>${c.do}</dd><dt>會考出現過</dt><dd style="font-family:var(--f-body);font-size:15px">${yrs}</dd></dl><button class="btn" style="margin-top:12px" data-go="${MOVES[c.m].id}">回去練「${MOVES[c.m].name}」</button>`;
+    adv.querySelector('[data-go]').addEventListener('click',e=>go(e.currentTarget.dataset.go));
+  }));
+  // 三筆示範
+  const sk=$('#sk');
+  for(let x=10;x<=310;x+=20)E('line',{x1:x,y1:0,x2:x,y2:210,stroke:'var(--grid)'},sk);
+  for(let y=5;y<=205;y+=20)E('line',{x1:0,y1:y,x2:320,y2:y,stroke:'var(--grid)'},sk);
+  const ax=E('path',{d:'M190 12 L190 200',class:'sk ax','stroke-dasharray':'6 6'},sk);
+  let pd='';for(let i=0;i<=60;i++){const x=70+i*4;const y=165-0.0085*(x-190)**2*-1;pd+=(i?'L':'M')+x+' '+(165-0.0085*Math.pow(x-190,2)).toFixed(1);}
+  const cv=E('path',{d:pd,class:'sk'},sk);
+  const dt=E('circle',{cx:190,cy:165,r:0,class:'sk-dot'},sk);
+  const l1=E('text',{x:198,y:28,class:'sk-lab'},sk,'① x = h');const l2=E('text',{x:200,y:190,class:'sk-lab'},sk,'② (h, k)');const l3=E('text',{x:68,y:50,class:'sk-lab'},sk,'③ 開口向上');
+  function setStroke(el,p){const L=el.getTotalLength();el.style.strokeDasharray=`${L} ${L}`;el.style.strokeDashoffset=L*(1-p);}
+  function frame(p){
+    const p1=clamp(p/0.3,0,1),p2=clamp((p-0.33)/0.15,0,1),p3=clamp((p-0.5)/0.5,0,1);
+    setStroke(ax,p1);if(p1>=1)ax.style.strokeDasharray='6 6';
+    dt.setAttribute('r',(8*p2).toFixed(2));setStroke(cv,p3);
+    l1.style.opacity=p1;l2.style.opacity=p2;l3.style.opacity=p3;
+  }
+  frame(1);
+  $('#sk-play').addEventListener('click',()=>tween(2600,frame));
+})();
+
+show(location.hash.slice(1));
+const fsb=$('#fs');
+if(!root.requestFullscreen)fsb.remove();else{fsb.addEventListener('click',()=>{if(document.fullscreenElement)document.exitFullscreen().catch(()=>{});else root.requestFullscreen().catch(()=>{fsb.textContent='此處無法全螢幕';});});document.addEventListener('fullscreenchange',()=>{fsb.textContent=document.fullscreenElement?'離開全螢幕':'全螢幕';layout();});}
+})();
+</script>
+
+</html>
